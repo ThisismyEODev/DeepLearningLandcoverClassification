@@ -1,3 +1,20 @@
+# Conda env config
+# ----------------
+
+# To create:
+#   $ conda env create -f environment.yml
+
+# To activate:
+#   $ conda activate up42-challenge-environment
+
+# To update:
+#   $ conda env update -f environment.yml
+
+# To remove:
+#   $ conda remove --name up42-challenge-environment --all -y
+
+---
+
 name: up42-challenge-environment
 
 channels:
