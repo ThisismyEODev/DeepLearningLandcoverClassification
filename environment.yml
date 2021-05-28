@@ -23,10 +23,9 @@ channels:
 
 dependencies:
 
-    - python=3.7
-    - pip=20.2.2
+    - python=3.5
+    - pip=20.2.4
     - libspatialindex
-    - matplotlib=3.0.3
 
     - pip:
 
@@ -39,7 +38,10 @@ dependencies:
           - rasterio==1.1.8
           - geopandas==0.8.1
 
+          - keras
           - tensorflow==2.4.1
+          - tensorflow-addons==0.12.1
+          - tensorflow-datasets==4.3.0
 
           - matplotlib==3.4.0
 
