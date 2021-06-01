@@ -47,6 +47,7 @@ def main() -> None:
                 X_test, y_test_encoded =\
                     input_data_preparation(data_foldername, parameters)
     
+    print("Perform some basic data exploration")
     plot_data_distribution_and_correlation(classes, 
                                            X_train, y_train_encoded)
     plot_data_distribution_and_correlation(classes, 
@@ -54,6 +55,8 @@ def main() -> None:
     plot_data_distribution_and_correlation(classes, 
                                            X_test, y_test_encoded)
     
+
+
 if __name__ == "__main__":
     main()
 
