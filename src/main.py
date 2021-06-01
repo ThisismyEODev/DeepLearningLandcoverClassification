@@ -22,7 +22,8 @@ from .data_download import retrieve_data
 from .data_preprocessing import input_data_preparation, encode_labels
 from .data_exploration import plot_data_distribution_and_correlation
 from .data_augmentation import augment_data
-from .create_resnetmodel import build_model, compile_and_fit_model
+from .create_resnetmodel import (build_model, compile_and_fit_model, 
+                                 compile_and_fit_model_from_generator)
 from .model_evaluation import evaluate_model_accuracy
 
 def main() -> None:
@@ -61,13 +62,19 @@ def main() -> None:
     print("Encode labels")
     y_train_encoded, y_test_encoded, y_validation_encoded=\
         encode_labels(y_train, y_test, y_validation)
+
+    print("Build ResNet50 model with some extra layers")
+    model = build_model(parameters, X_train, y_train_encoded)
+    print(model.summary())
     
     if parameters.augment == False:
         print("We leave the data as is", "\n")
 
-        print("Build ResNet50 model with some extra layers")
-        model = build_model(parameters, X_train, y_train_encoded)
-        print(model.summary())
+        print("Compile and fit model")
+        history = compile_and_fit_model(parameters, model,
+                                    X_train, y_train_encoded,
+                                    X_validation, y_validation_encoded,
+                                    save_model=parameters.save_model)
 
     elif parameters.augment == True:
         print("We apply some variations to the data", "\n")
@@ -77,13 +84,13 @@ def main() -> None:
                                                    X_test, 
                                                    y_test)
 
-        print("Build ResNet50 model with some extra layers")
+        history = compile_and_fit_model_from_generator(parameters, model,
+                                                       train_datagen,
+                                                       X_train,
+                                                       test_datagen,
+                                                       X_validation,
+                                                       save_model=parameters.save_model)
 
-    print("Compile and fit model")
-    history = compile_and_fit_model(parameters, model,
-                                    X_train, y_train_encoded,
-                                    X_validation, y_validation_encoded,
-                                    save_model=parameters.save_model)
     
     print("Plot accuracy")
     evaluate_model_accuracy(model, history, X_test, y_test)

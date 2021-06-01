@@ -31,7 +31,7 @@ def build_model(parameters, X_train, y_train):
 
 def compile_and_fit_model(parameters, model, 
                           X_train, y_train, 
-                          X_validation, y_validation,
+                          X_test, y_test,
                           save_model):
 
     model.compile(optimizer = parameters.optimizer,
@@ -47,11 +47,48 @@ def compile_and_fit_model(parameters, model,
     history = model.fit(X_train, y_train,
                  batch_size = parameters.batch_size,
                  epochs = parameters.epoch,
-                 steps_per_epoch = X_train.shape[0]//parameters.batch_size,
-                 validation_data=(X_validation,y_validation),
-                 validation_steps = parameters.validation_steps,
+                 steps_per_epoch = len(X_train) // parameters.batch_size,
+                 validation_data=(X_test, y_test),
+                 validation_steps = len(X_test) // parameters.batch_size,
                  callbacks = callback_list,
                  verbose=1)
+    
+    if save_model:
+        filepath = model_file
+        tf.keras.models.save_model(
+            model, filepath, overwrite=True, 
+            include_optimizer=True, save_format=None,
+            signatures=None, options=None, save_traces=True)
+
+    return history
+
+def compile_and_fit_model_from_generator(parameters, model, 
+                                         train_generator,
+                                         X_train,
+                                         test_generator,
+                                         X_test,
+                                         save_model):
+
+    model.compile(optimizer = parameters.optimizer,
+                  loss = parameters.loss_function,
+                  metrics = parameters.model_metric)
+    
+    model_file = parameters.model_path / parameters.model_name
+    checkpoint = keras.callbacks.ModelCheckpoint(filepath = model_file,
+                                             monitor = 'val_loss',
+                                             save_best_only = True)
+    callback_list = [checkpoint]
+
+    history = model.fit_generator(train_generator,
+                                  batch_size = parameters.batch_size,
+                                  epochs = parameters.epoch,
+                                  steps_per_epoch = len(X_train) //\
+                                      parameters.batch_size,
+                                  validation_data = test_generator,
+                                  validation_steps = len(X_test) //\
+                                      parameters.batch_size,
+                                  callbacks = callback_list,
+                                  verbose=1)
     
     if save_model:
         filepath = model_file
