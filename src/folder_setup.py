@@ -12,8 +12,6 @@ def setup_workspace(parameters):
     """
     Sets up the directories for this challenge
 
-    Parameters
-    ----------
     path : str or Path
         path to where we want to work.
 

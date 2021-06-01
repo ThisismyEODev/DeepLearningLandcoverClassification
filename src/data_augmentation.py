@@ -9,6 +9,30 @@ Created on Tue Jun  1 13:49:13 2021
 from keras.preprocessing.image import ImageDataGenerator
 
 def augment_data(parameters, X_train, y_train, X_test, y_test):
+    """
+    Builds the ResNet50 model
+    
+    parameters: input parameter which is automatically loaded into the main.py
+                file
+    
+    X_train:    Training images
+                Array of float of size 
+                (num training samples, width, height, number of bands)
+    y_train:    Encoded labels                
+                Array of float of size 
+                (num training samples, number of classes)
+    X_test:    Training images
+                Array of float of size 
+                (num testing samples, width, height, number of bands)
+    y_test:    Encoded labels                
+                Array of float of size 
+                (num testing samples, number of classes)
+    
+    Returns:
+
+    train_generator:    keras imagedatagenerator instance
+    test_generator:    keras imagedatagenerator instance
+    """
 
     train_datagen = ImageDataGenerator(
         shear_range = parameters.shear,

@@ -13,6 +13,7 @@ For more information, see project's GitLab repo:
 
 import argparse
 import time
+import numpy as np
 
 from loguru import logger
 
@@ -25,6 +26,7 @@ from .data_augmentation import augment_data
 from .create_resnetmodel import (build_model, compile_and_fit_model, 
                                  compile_and_fit_model_from_generator)
 from .model_evaluation import evaluate_model_accuracy
+from .model_prediction import run_prediction_on_example_image
 
 def main() -> None:
 
@@ -86,9 +88,7 @@ def main() -> None:
 
         history = compile_and_fit_model_from_generator(parameters, model,
                                                        train_datagen,
-                                                       X_train,
                                                        test_datagen,
-                                                       X_validation,
                                                        save_model=parameters.save_model)
 
     
@@ -96,6 +96,13 @@ def main() -> None:
     accuracy = model.evaluate(X_test, y_test_encoded)
     evaluate_model_accuracy(parameters, model, history, X_test, y_test_encoded)
     
+    print("Predict class of a random sample of the images")
+    length_test_data = len(X_test)
+    indexes_test_data = np.arange(length_test_data)
+    ind = np.random.choice(indexes_test_data, 1, replace=False)
+    run_prediction_on_example_image(model, classes, X_test, ind)
+    
+
 if __name__ == "__main__":
     main()
 

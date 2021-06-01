@@ -8,6 +8,18 @@
 import tensorflow_datasets as tfds
 
 def retrieve_data(parameters):
+    """
+    Get data based on download True or False
+    Loads data into folder location given in "parameters"
+
+    parameters:     input parameter which is automatically loaded into the main.py
+                    file
+                
+    Returns:
+        
+    data_frame:     Name of folder in which data are now located
+                    str
+    """
     if parameters.download == True:
         print("Download EuroSAT dataset", "\n")
         data_path = parameters.path / 'inputdata'
