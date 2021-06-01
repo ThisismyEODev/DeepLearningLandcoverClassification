@@ -48,6 +48,11 @@ training_size = .7
 testing_size = .3
 balanced = True
 
+augment = False
+shear = 0.2
+zoom = 0.2
+rotation = 30
+
 
 ##### RESNET50 Model Setup ###########
 

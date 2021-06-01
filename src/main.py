@@ -21,6 +21,7 @@ from .folder_setup import setup_workspace
 from .data_download import retrieve_data
 from .data_preprocessing import input_data_preparation, encode_labels
 from .data_exploration import plot_data_distribution_and_correlation
+from .data_augmentation import augment_data
 from .create_resnetmodel import build_model, compile_and_fit_model
 from .model_evaluation import evaluate_model_accuracy
 
@@ -56,14 +57,27 @@ def main() -> None:
                                            X_validation, y_validation)
     plot_data_distribution_and_correlation(classes, 
                                            X_test, y_test)
-    
+
     print("Encode labels")
     y_train_encoded, y_test_encoded, y_validation_encoded=\
         encode_labels(y_train, y_test, y_validation)
+    
+    if parameters.augment == False:
+        print("We leave the data as is", "\n")
 
-    print("Build ResNet50 model with some extra layers")
-    model = build_model(parameters, X_train, y_train_encoded)
-    print(model.summary())
+        print("Build ResNet50 model with some extra layers")
+        model = build_model(parameters, X_train, y_train_encoded)
+        print(model.summary())
+
+    elif parameters.augment == True:
+        print("We apply some variations to the data", "\n")
+        train_datagen, test_datagen = augment_data(parameters, 
+                                                   X_train, 
+                                                   y_train, 
+                                                   X_test, 
+                                                   y_test)
+
+        print("Build ResNet50 model with some extra layers")
 
     print("Compile and fit model")
     history = compile_and_fit_model(parameters, model,
