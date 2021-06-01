@@ -67,7 +67,8 @@ elif optimizer_name == "adam":
 elif optimizer_name == "rms":
     optimizer = RMSprop()
 
-
 model_metric = ['accuracy']
 loss_function = 'categorical_crossentropy'
 
+save_model = False
+model_name = f"Resnet50_{spectral_bands}_{optimizer_name}.h5"

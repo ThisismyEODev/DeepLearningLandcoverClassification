@@ -32,13 +32,13 @@ def build_model(parameters, X_train, y_train):
 def compile_and_fit_model(parameters, model, 
                           X_train, y_train, 
                           X_validation, y_validation,
-                          model_name, save_model=False):
+                          save_model):
 
     model.compile(optimizer = parameters.optimizer,
                   loss = parameters.loss_function,
                   metrics = parameters.model_metric)
     
-    model_file = parameters.model_path / model_name
+    model_file = parameters.model_path / parameters.model_name
     checkpoint = keras.callbacks.ModelCheckpoint(filepath = model_file,
                                              monitor = 'val_loss',
                                              save_best_only = True)
@@ -54,7 +54,7 @@ def compile_and_fit_model(parameters, model,
                  verbose=1)
     
     if save_model:
-        filepath = parameters.model_path / model_file.stem / '.h5'
+        filepath = model_file
         tf.keras.models.save_model(
             model, filepath, overwrite=True, 
             include_optimizer=True, save_format=None,
