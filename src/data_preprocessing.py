@@ -106,9 +106,9 @@ def input_data_preparation(data_foldername, parameters):
             X_test, y_test)
 
 
-def encode_labels(y_train, y_test, y_validation):
+def encode_labels(classes, y_train, y_test, y_validation):
     y_train_encoded = tf.keras.utils.to_categorical(
-        y_train, num_classes=None, dtype='float32')
+        y_train, num_classes=len(classes), dtype='float32')
 
     y_validation_encoded = tf.keras.utils.to_categorical(
         y_validation, num_classes=None, dtype='float32')

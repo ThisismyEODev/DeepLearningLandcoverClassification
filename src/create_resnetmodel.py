@@ -47,9 +47,9 @@ def compile_and_fit_model(parameters, model,
     history = model.fit(X_train, y_train,
                  batch_size = parameters.batch_size,
                  epochs = parameters.epoch,
-                 steps_per_epoch = len(X_train) // parameters.batch_size,
+                 steps_per_epoch = parameters.steps_per_epoch,
                  validation_data=(X_test, y_test),
-                 validation_steps = len(X_test) // parameters.batch_size,
+                 validation_steps = parameters.validation_steps,
                  callbacks = callback_list,
                  verbose=1)
     
@@ -82,11 +82,9 @@ def compile_and_fit_model_from_generator(parameters, model,
     history = model.fit_generator(train_generator,
                                   batch_size = parameters.batch_size,
                                   epochs = parameters.epoch,
-                                  steps_per_epoch = len(X_train) //\
-                                      parameters.batch_size,
+                                  steps_per_epoch = parameters.steps_per_epoch,
                                   validation_data = test_generator,
-                                  validation_steps = len(X_test) //\
-                                      parameters.batch_size,
+                                  validation_steps = parameters.validation_steps,
                                   callbacks = callback_list,
                                   verbose=1)
     

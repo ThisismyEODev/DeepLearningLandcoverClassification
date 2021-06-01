@@ -33,5 +33,11 @@ path where the data is stored
 - Increase function / input flexibility
 - Test augmentation since it hasn't been tested yet
 - Implement functionality for dealing with all S2 bands
+- Dockerize
+- If possible, optimize data read
+- If possible, optimize model running
+- Apply grid search for hyperparameter tuning
+
+
 
 

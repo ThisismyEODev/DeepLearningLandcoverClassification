@@ -61,7 +61,7 @@ def main() -> None:
 
     print("Encode labels")
     y_train_encoded, y_test_encoded, y_validation_encoded=\
-        encode_labels(y_train, y_test, y_validation)
+        encode_labels(classes, y_train, y_test, y_validation)
 
     print("Build ResNet50 model with some extra layers")
     model = build_model(parameters, X_train, y_train_encoded)
@@ -92,8 +92,9 @@ def main() -> None:
                                                        save_model=parameters.save_model)
 
     
-    print("Plot accuracy")
-    evaluate_model_accuracy(model, history, X_test, y_test)
+    print("Print and plot accuracy")
+    accuracy = model.evaluate(X_test, y_test_encoded)
+    evaluate_model_accuracy(parameters, model, history, X_test, y_test_encoded)
     
 if __name__ == "__main__":
     main()

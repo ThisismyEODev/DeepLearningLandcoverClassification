@@ -60,6 +60,8 @@ w = 'imagenet' # Weights for the ResNet50 Model
 
 epochs = 10
 batch_size = 32
+steps_per_epoch = None
+validation_steps = None
 target_size = (224, 224)
 learning_rate = 0.01 # 0.01, 0.001, 0.0001
 
