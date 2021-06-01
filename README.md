@@ -14,7 +14,9 @@ git clone https://github.com/ThisismyEODev/DeepLearningLandcoverClassification.g
 
 To run the code, simply go to the src directory and run "python main.py".
 This should load all the configurations set in the "parameter_file.py" file.
-If the parameters should be different, simply change them in the "parameter_file.py".
+Note that the "path" parameter should point to the directory in which the eurosat data is stored
+(see Known Issues below).
+If any other of the parameters should be different, simply change them in the "parameter_file.py".
 
 
 ## Known Issues
