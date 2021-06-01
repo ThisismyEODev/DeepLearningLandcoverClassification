@@ -39,10 +39,13 @@ def main() -> None:
     print("Access data")
     data_foldername = retrieve_data()
 
-    X_train, y_train_encoded, X_validation, y_validation_encoded,\
+    print("Split data")
+    label_dictionary, X_train, y_train_encoded,\
+        X_validation, y_validation_encoded,\
             X_test, y_test_encoded =\
                 input_data_preparation(data_foldername, parameters)
-                
+    
+    
     
 if __name__ == "__main__":
     main()

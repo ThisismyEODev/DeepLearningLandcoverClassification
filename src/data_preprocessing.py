@@ -63,7 +63,8 @@ def input_data_preparation(data_foldername, parameters):
         index_balanced = [item for sublist in index_balanced for item in sublist]
         print(f"We have a total of {len(index_balanced)} images to work with")
 
-        index_balanced = shuffle(index_balanced, random_state = seed)
+        index_balanced = shuffle(index_balanced, 
+                                 random_state = parameters.seed)
         encoded_labels_balanced = encoded_labels[index_balanced]
         eurosat_imgs_balanced = eurosat_imgs[index_balanced]
 
@@ -73,14 +74,14 @@ def input_data_preparation(data_foldername, parameters):
                          encoded_labels_balanced, 
                          stratify = encoded_labels_balanced, 
                          train_size = .9, 
-                         random_state = seed)
+                         random_state = parameters.seed)
 
         _, X_test, _, y_test =\
             train_test_split(eurosat_imgs_balanced, 
                          encoded_labels_balanced, 
                          stratify = encoded_labels_balanced, 
                          test_size = .1, 
-                         random_state = seed)
+                         random_state = parameters.seed)
 
         y_train_encoded = tf.keras.utils.to_categorical(
             y_train, num_classes=None, dtype='float32')
@@ -116,7 +117,7 @@ def input_data_preparation(data_foldername, parameters):
         y_test_encoded = tf.keras.utils.to_categorical(
             y_test, num_classes=None, dtype='float32')
 
-    return (X_train, y_train_encoded, 
+    return (label_dictionary, X_train, y_train_encoded, 
             X_validation, y_validation_encoded,
             X_test, y_test_encoded)
 
