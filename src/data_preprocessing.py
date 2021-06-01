@@ -117,7 +117,8 @@ def input_data_preparation(data_foldername, parameters):
         y_test_encoded = tf.keras.utils.to_categorical(
             y_test, num_classes=None, dtype='float32')
 
-    return (label_dictionary, X_train, y_train_encoded, 
+    return (label_dictionary, classes, 
+            X_train, y_train_encoded, 
             X_validation, y_validation_encoded,
             X_test, y_test_encoded)
 

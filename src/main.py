@@ -20,6 +20,7 @@ import parameter_file as parameters
 from .folder_setup import setup_workspace
 from .data_download import retrieve_data
 from .data_preprocessing import input_data_preparation
+from .data_exploration import plot_data_distribution_and_correlation
 
 def main() -> None:
 
@@ -36,16 +37,22 @@ def main() -> None:
     print("Setting up the workspace")
     setup_workspace()
 
-    print("Access data")
+    print("Access data and point to where it is located")
     data_foldername = retrieve_data()
 
     print("Split data")
-    label_dictionary, X_train, y_train_encoded,\
-        X_validation, y_validation_encoded,\
-            X_test, y_test_encoded =\
-                input_data_preparation(data_foldername, parameters)
+    label_dictionary, classes,\
+        X_train, y_train_encoded,\
+            X_validation, y_validation_encoded,\
+                X_test, y_test_encoded =\
+                    input_data_preparation(data_foldername, parameters)
     
-    
+    plot_data_distribution_and_correlation(classes, 
+                                           X_train, y_train_encoded)
+    plot_data_distribution_and_correlation(classes, 
+                                           X_validation, y_validation_encoded)
+    plot_data_distribution_and_correlation(classes, 
+                                           X_test, y_test_encoded)
     
 if __name__ == "__main__":
     main()
