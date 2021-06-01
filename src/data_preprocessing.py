@@ -83,14 +83,6 @@ def input_data_preparation(data_foldername, parameters):
                          test_size = .1, 
                          random_state = parameters.seed)
 
-        y_train_encoded = tf.keras.utils.to_categorical(
-            y_train, num_classes=None, dtype='float32')
-
-        y_validation_encoded = tf.keras.utils.to_categorical(
-            y_validation, num_classes=None, dtype='float32')
-
-        y_test_encoded = tf.keras.utils.to_categorical(
-            y_test, num_classes=None, dtype='float32')
 
     else:
         X_train, X_validation,\
@@ -108,19 +100,21 @@ def input_data_preparation(data_foldername, parameters):
                          test_size = parameters.test_size, 
                          random_state = parameters.seed)
 
-        y_train_encoded = tf.keras.utils.to_categorical(
-            y_train, num_classes=None, dtype='float32')
-
-        y_validation_encoded = tf.keras.utils.to_categorical(
-            y_validation, num_classes=None, dtype='float32')
-
-        y_test_encoded = tf.keras.utils.to_categorical(
-            y_test, num_classes=None, dtype='float32')
-
     return (label_dictionary, classes, 
-            X_train, y_train_encoded, 
-            X_validation, y_validation_encoded,
-            X_test, y_test_encoded)
+            X_train, y_train, 
+            X_validation, y_validation,
+            X_test, y_test)
 
+def encode_labels(y_train, y_test, y_validation):
+    y_train_encoded = tf.keras.utils.to_categorical(
+        y_train, num_classes=None, dtype='float32')
+
+    y_validation_encoded = tf.keras.utils.to_categorical(
+        y_validation, num_classes=None, dtype='float32')
+
+    y_test_encoded = tf.keras.utils.to_categorical(
+        y_test, num_classes=None, dtype='float32')
+
+    return y_train_encoded, y_test_encoded, y_validation_encoded 
 
 

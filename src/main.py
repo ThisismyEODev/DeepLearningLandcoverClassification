@@ -19,7 +19,7 @@ from loguru import logger
 import parameter_file as parameters
 from .folder_setup import setup_workspace
 from .data_download import retrieve_data
-from .data_preprocessing import input_data_preparation
+from .data_preprocessing import input_data_preparation, encode_labels
 from .data_exploration import plot_data_distribution_and_correlation
 
 def main() -> None:
@@ -42,20 +42,22 @@ def main() -> None:
 
     print("Split data")
     label_dictionary, classes,\
-        X_train, y_train_encoded,\
-            X_validation, y_validation_encoded,\
-                X_test, y_test_encoded =\
+        X_train, y_train,\
+            X_validation, y_validation,\
+                X_test, y_test =\
                     input_data_preparation(data_foldername, parameters)
     
     print("Perform some basic data exploration")
     plot_data_distribution_and_correlation(classes, 
-                                           X_train, y_train_encoded)
+                                           X_train, y_train)
     plot_data_distribution_and_correlation(classes, 
-                                           X_validation, y_validation_encoded)
+                                           X_validation, y_validation)
     plot_data_distribution_and_correlation(classes, 
-                                           X_test, y_test_encoded)
+                                           X_test, y_test)
     
-
+    print("Encode labels")
+    y_train_encoded, y_test_encoded, y_validation_encoded=\
+        encode_labels(y_train, y_test, y_validation)
 
 if __name__ == "__main__":
     main()
