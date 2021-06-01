@@ -6,6 +6,8 @@ Created on Tue Jun  1 09:37:48 2021
 @email: nastasja.development@gmail.com
 """
 
+from keras.optimizers import RMSprop, Adam, SGD
+
 ####### FIXED PARAMETERS - Please to not change #######
 
 input_folder_names = dict()
@@ -57,6 +59,15 @@ target_size = (224, 224)
 learning_rate = 0.01 # 0.01, 0.001, 0.0001
 
 # Change here if you want to test other optimizers
+optimizer_name = "sgd"
+if optimizer_name == "sgd":
+    optimizer = SGD()
+elif optimizer_name == "adam":
+    optimizer = Adam()
+elif optimizer_name == "rms":
+    optimizer = RMSprop()
+
+
 model_metric = ['accuracy']
 loss_function = 'categorical_crossentropy'
 
