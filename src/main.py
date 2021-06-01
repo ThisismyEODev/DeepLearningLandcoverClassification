@@ -101,6 +101,12 @@ def main() -> None:
     indexes_test_data = np.arange(length_test_data)
     ind = np.random.choice(indexes_test_data, 1, replace=False)
     run_prediction_on_example_image(model, classes, X_test, ind)
+
+    # Report finishing module.
+    logger.info(
+        f"\n\nchange_detection_data_analysis finished in"
+        f" {(time.time() - start_time)/60:.1f} minutes.\n"
+    )
     
 
 if __name__ == "__main__":
