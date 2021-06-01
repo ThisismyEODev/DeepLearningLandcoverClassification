@@ -26,3 +26,10 @@ The module currently only runs on previously downloaded files.
 Therefore, the path variable in the "parameter_file.py" should be set to the
 path where the data is stored
 
+## TODOs
+
+- Apply some unit testing
+- Increase function / input flexibility
+- Test augmentation since it hasn't been tested yet
+
+
