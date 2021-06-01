@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Created on Tue Jun  1 09:37:48 2021
+This is the configuration file for running the module
 
 @author: ThisismyEODev
 @email: nastasja.development@gmail.com
@@ -20,7 +20,7 @@ input_format["all"] = ".tif"
 
 number_of_bands = dict()
 number_of_bands["RGB"] = 3
-number_of_bands["all"] = 3
+number_of_bands["all"] = 13
 
 ####### PARAMETER CONFIGURATION 
 
@@ -42,7 +42,6 @@ n_bands = number_of_bands[spectral_bands]
 
 
 ##### Train Test Validation Setup ###########
-# This is the percentage of training data per label!
 
 seed = 42
 training_size = .7
@@ -51,6 +50,7 @@ balanced = True
 
 
 ##### RESNET50 Model Setup ###########
+
 w = 'imagenet' # Weights for the ResNet50 Model
 
 epochs = 10
