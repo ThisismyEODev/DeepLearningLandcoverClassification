@@ -21,6 +21,7 @@ from .folder_setup import setup_workspace
 from .data_download import retrieve_data
 from .data_preprocessing import input_data_preparation, encode_labels
 from .data_exploration import plot_data_distribution_and_correlation
+from .create_resnetmodel import *
 from .model_evaluation import evaluate_model_accuracy
 
 def main() -> None:
