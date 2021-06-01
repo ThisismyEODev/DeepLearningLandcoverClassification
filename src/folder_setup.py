@@ -7,7 +7,6 @@
 """
 
 from pathlib import Path
-import parameter_file as parameters
 
 def setup_workspace(parameters):
     """
@@ -35,10 +34,3 @@ def setup_workspace(parameters):
         print("Create the directory for storing models")
         model_path.mkdir()
 
-
-def main() -> None:
-    setup_workspace(parameters)
-
-
-if __name__ == "__main__":
-    main()

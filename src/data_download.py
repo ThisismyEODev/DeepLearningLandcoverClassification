@@ -6,8 +6,6 @@
 """
 
 import tensorflow_datasets as tfds
-import parameter_file as parameters
-
 
 def retrieve_data(parameters):
     if parameters.download == True:
@@ -31,11 +29,3 @@ def retrieve_data(parameters):
         data_foldername = parameters.data_folder
     
     return data_foldername
-
-def main() -> None:
-    retrieve_data(parameters)
-
-
-if __name__ == "__main__":
-    main()
-

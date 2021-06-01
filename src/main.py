@@ -71,6 +71,8 @@ def main() -> None:
                                     X_validation, y_validation_encoded,
                                     save_model=parameters.save_model)
     
+    print("Plot accuracy")
+    evaluate_model_accuracy(model, history, X_test, y_test)
     
 if __name__ == "__main__":
     main()
