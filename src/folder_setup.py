@@ -9,7 +9,7 @@
 from pathlib import Path
 import parameter_file as parameters
 
-def setup_workspace(path):
+def setup_workspace(parameters):
     """
     Sets up the directories for this challenge
 
@@ -19,9 +19,9 @@ def setup_workspace(path):
         path to where we want to work.
 
     """
-    if isinstance(path, str):
-        path = Path(path)
-    elif isinstance(path, Path):
+    if isinstance(parameters.path, str):
+        path = Path(parameters.path)
+    elif isinstance(parameters.path, Path):
         path = path
     print("The Setup will occur here: ", str(path))
 
@@ -37,7 +37,7 @@ def setup_workspace(path):
 
 
 def main() -> None:
-    setup_workspace(parameters.path)
+    setup_workspace(parameters)
 
 
 if __name__ == "__main__":

@@ -18,6 +18,7 @@ from loguru import logger
 
 import parameter_file as parameters
 from .folder_setup import setup_workspace
+from .data_download import retrieve_data
 
 
 def main() -> None:
@@ -32,21 +33,11 @@ def main() -> None:
         description="UP 42 Coding Challenge."
     )
 
-    parser.add_argument(
-        "--dir",
-        type=str,
-        help="Path to working directory we want to work in.",
-        required=False,
-    )
-    args = parser.parse_args()
-    working_dir = args.dir
+    print("Setting up the workspace")
+    setup_workspace()
 
-    logger.info("Setting up the directories ...")
-    setup_workspace(working_dir)
+    print("Access data")
 
-    # Pre process one folder at a time
-
-    # Predict
 
     
 if __name__ == "__main__":
