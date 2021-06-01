@@ -16,6 +16,9 @@ input_format = dict()
 input_format["RGB"] = ".jpg"
 input_format["all"] = ".tif"
 
+number_of_bands = dict()
+number_of_bands["RGB"] = 3
+number_of_bands["all"] = 3
 
 ####### PARAMETER CONFIGURATION 
 
@@ -32,12 +35,17 @@ spectral_bands = "RGB"
 data_folder = input_folder_names[spectral_bands]
 data_format = input_format[spectral_bands]
 
+img_size = 64
+n_bands = number_of_bands[spectral_bands]
+
+
 ##### Train Test Validation Setup ###########
 # This is the percentage of training data per label!
 
 seed = 42
 training_size = .7
 testing_size = .3
+balanced = True
 
 
 ##### RESNET50 Model Setup ###########

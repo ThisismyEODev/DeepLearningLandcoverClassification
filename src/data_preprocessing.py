@@ -5,85 +5,120 @@
 @email: nastasja.development@gmail.com
 """
 
-import argparse
-from distutils.util import strtobool
-import glob
-from loguru import logger
+
 import numpy as np
-from pathlib import Path
-import rasterio as rio
-import time
+from PIL import Image
+from sklearn.utils import shuffle
+from sklearn.model_selection import train_test_split
+import tensorflow as tf
+
+def input_data_preparation(data_foldername, parameters):
+    
+    path_to_imagery = parameters.path / 'inputdata' / data_foldername
+    all_files_in_path = list(path_to_imagery.rglob("*"))
+    paths_to_imgs = [x for x in all_files_in_path if\
+                     parameters.data_format in x.suffix]
+
+    all_files_in_path = None
+
+    eurosat_imgs = np.zeros([len(paths_to_imgs), 
+                             parameters.img_size, 
+                             parameters.img_size, 
+                             parameters.n_bands])
+    i = 0
+    for pic in paths_to_imgs:
+        eurosat_imgs[i] = np.asarray(Image.open(pic)).astype(np.uint8)/255
+        i += 1
+
+    labels = []
+    for path in paths_to_imgs:
+        labels.append(str(path.parent.name))
+
+    # Extract classes and create a label dictionary
+    classes, encoded_labels = np.unique(labels, return_inverse=True)
+    encoded_labels = [lab.astype(np.uint8) for lab in encoded_labels] 
+    encoded_labels = np.asarray(encoded_labels)
+
+    label_dictionary = dict(zip(np.unique(encoded_labels), classes))
+    print("We have the following image content classes' \
+          'and their respective encoding:", label_dictionary, "\n")
+    num_classes = len(np.array(np.unique(classes)))
+    print(f"We have a total of {num_classes} classes")
+
+    labels = None
+    paths_to_imgs = None
+
+    if parameters.balanced == True:
+        print("We want to make sure our class distribution is balanced")
+        smallest_class = np.argmin(np.bincount(encoded_labels))
+        smallest_class_ind = np.where(encoded_labels == smallest_class)[0]
+
+        print("Pick from each class the same number of samples ")
+        index_balanced = []
+        for i in range(num_classes):
+            tmp = shuffle(np.where(encoded_labels == i)[0], 
+                      random_state=42)[0:smallest_class_ind.shape[0]]
+            index_balanced.append(tmp)
+
+        index_balanced = [item for sublist in index_balanced for item in sublist]
+        print(f"We have a total of {len(index_balanced)} images to work with")
+
+        index_balanced = shuffle(index_balanced, random_state = seed)
+        encoded_labels_balanced = encoded_labels[index_balanced]
+        eurosat_imgs_balanced = eurosat_imgs[index_balanced]
+
+        X_train, X_validation,\
+            y_train, y_validation =\
+                train_test_split(eurosat_imgs_balanced, 
+                         encoded_labels_balanced, 
+                         stratify = encoded_labels_balanced, 
+                         train_size = .9, 
+                         random_state = seed)
+
+        _, X_test, _, y_test =\
+            train_test_split(eurosat_imgs_balanced, 
+                         encoded_labels_balanced, 
+                         stratify = encoded_labels_balanced, 
+                         test_size = .1, 
+                         random_state = seed)
+
+        y_train_encoded = tf.keras.utils.to_categorical(
+            y_train, num_classes=None, dtype='float32')
+
+        y_validation_encoded = tf.keras.utils.to_categorical(
+            y_validation, num_classes=None, dtype='float32')
+
+        y_test_encoded = tf.keras.utils.to_categorical(
+            y_test, num_classes=None, dtype='float32')
+
+    else:
+        X_train, X_validation,\
+            y_train, y_validation =\
+                train_test_split(eurosat_imgs, 
+                         encoded_labels, 
+                         stratify = encoded_labels, 
+                         train_size = parameters.training_size, 
+                         random_state = parameters.seed)
+
+        _, X_test, _, y_test =\
+            train_test_split(eurosat_imgs_balanced, 
+                         encoded_labels_balanced, 
+                         stratify = encoded_labels_balanced, 
+                         test_size = parameters.test_size, 
+                         random_state = parameters.seed)
+
+        y_train_encoded = tf.keras.utils.to_categorical(
+            y_train, num_classes=None, dtype='float32')
+
+        y_validation_encoded = tf.keras.utils.to_categorical(
+            y_validation, num_classes=None, dtype='float32')
+
+        y_test_encoded = tf.keras.utils.to_categorical(
+            y_test, num_classes=None, dtype='float32')
+
+    return (X_train, y_train_encoded, 
+            X_validation, y_validation_encoded,
+            X_test, y_test_encoded)
 
 
-def main() -> None:
-    """Run module from command line."""
-    logger.add(f"logs/{time.strftime('%Y%m%d_%H%M%S')}.log", retention="10 days")
-    logger.info("Preprocessing EuroSAT data ...")
-    start_time = time.time()
-
-    parser = argparse.ArgumentParser(
-        description="Preprocessing EuroSAT data."
-    )
-
-    parser.add_argument(
-        "--input",
-        type=Path,
-        help="Directory of the input raster files",
-        required=True,
-    )
-    parser.add_argument(
-        "--export-numpy",
-        type=strtobool,
-        help="Export dataset as .npy file. Default is False",
-        required=False,
-        default=False,
-    )
-    parser.add_argument(
-        "--output",
-        type=Path,
-        help="Path of the output directory where to store processed data",
-        required=True,
-    )
-
-    args = parser.parse_args()
-    for raster_path in args.input.glob("*.tif"):
-        raster_path = Path(raster_path)
-        with rio.open(raster_path) as img:
-            out_meta = img.meta
-            out_img = np.empty((args.n_bands, img.height, img.width))
-            for i in range(args.n_bands):
-                band = img.read(i + 1).astype("float32")
-
-                # Apply atmospheric correction
-
-                # if required
-                out_img[i] = band
-
-            if args.n_bands == 1:
-                out_img = out_img[0]
-
-            out_img = out_img.astype("float32")
-            out_meta["count"] = args.n_bands
-            out_meta["compress"] = "deflate"
-
-#            patches = np.array([x.name for x in patches])
-#     patches_df = pd.DataFrame(patch_filenames_intersected)
-#    patches_df.to_csv(dataset_path / "data.csv", index=False, header=None)
-
-#            if args.export_numpy:
-#                np.save(args.output / f"{raster_path.stem}.npy", out_img)
-#            else:
-#                write_raster_to_file(
-#                    out_img, file_path=args.output / raster_path.name, raster_meta=out_meta
-#                )
-
-
-    logger.info(
-        f"\n\npre-processing finished in"
-        f" {(time.time() - start_time) / 60:.1f} minutes.\n"
-    )
-
-
-if __name__ == "__main__":
-    main()
 
