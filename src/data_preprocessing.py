@@ -83,7 +83,6 @@ def input_data_preparation(data_foldername, parameters):
                          test_size = .1, 
                          random_state = parameters.seed)
 
-
     else:
         print("We leave the class distribution as is")
         X_train, X_validation,\
@@ -105,6 +104,7 @@ def input_data_preparation(data_foldername, parameters):
             X_train, y_train, 
             X_validation, y_validation,
             X_test, y_test)
+
 
 def encode_labels(y_train, y_test, y_validation):
     y_train_encoded = tf.keras.utils.to_categorical(
