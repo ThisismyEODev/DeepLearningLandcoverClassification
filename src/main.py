@@ -16,10 +16,14 @@ import time
 
 from loguru import logger
 
+import parameter_file as parameters
 from .folder_setup import setup_workspace
 
+
 def main() -> None:
+
     """Run module from command line."""
+
     logger.add(f"logs/{time.strftime('%Y%m%d_%H%M%S')}.log", retention="10 days")
     logger.info("Starting landcover classification ...")
     start_time = time.time()
