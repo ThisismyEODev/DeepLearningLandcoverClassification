@@ -28,8 +28,10 @@ path where the data is stored
 
 ## TODOs
 
-- Apply some unit testing
+- Fix data download issue
+- Apply unit testing
 - Increase function / input flexibility
 - Test augmentation since it hasn't been tested yet
+- Implement functionality for dealing with all S2 bands
 
 
