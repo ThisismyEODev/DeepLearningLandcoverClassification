@@ -85,6 +85,7 @@ def input_data_preparation(data_foldername, parameters):
 
 
     else:
+        print("We leave the class distribution as is")
         X_train, X_validation,\
             y_train, y_validation =\
                 train_test_split(eurosat_imgs, 
