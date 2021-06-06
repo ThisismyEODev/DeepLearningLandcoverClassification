@@ -26,7 +26,7 @@ from .data_augmentation import augment_data
 from .create_resnetmodel import (build_model, compile_and_fit_model, 
                                  compile_and_fit_model_from_generator)
 from .model_evaluation import plot_model_accuracy
-from .model_prediction import run_prediction_on_example_image
+from .model_prediction import make_prediction
 
 def main() -> None:
 
@@ -96,11 +96,9 @@ def main() -> None:
     accuracy = model.evaluate(X_test, y_test_encoded)
     plot_model_accuracy(model, history, parameters.epoch)
     
-    print("Predict class of a random sample of the images")
-    length_test_data = len(X_test)
-    indexes_test_data = np.arange(length_test_data)
-    ind = np.random.choice(indexes_test_data, 1, replace=False)
-    run_prediction_on_example_image(model, classes, X_test, ind)
+    print("Run prediction")
+    predicted_labels, y_test_true, y_test_pred, y_pred_encoded = \
+        make_prediction(model, X_test, y_test, label_dictionary)
 
     # Report finishing module.
     logger.info(
