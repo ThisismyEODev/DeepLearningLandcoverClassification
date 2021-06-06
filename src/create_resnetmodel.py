@@ -9,31 +9,34 @@ from keras import models
 from keras import layers
 from keras.applications.resnet50 import ResNet50
 import tensorflow as tf
+from keras.utils  import plot_model
+import IPython
 
-def build_model(parameters, X_train, y_train):
+def build_model(parameters, classes):
     """
-    Builds the ResNet50 model
-    
-    parameters: input parameter which is automatically loaded into the main.py
-                file
-    
-    X_train:    Training images
-                Array of float of size 
-                (num training samples, width, height, number of bands)
-    y_train:    Encoded labels                
-                Array of float of size 
-                (num training samples, number of classes)
+    Generates the ResNet50 model
 
-    Returns:
-        
-    model_resnet Model architecture with ResNet50 as base model
+    Parameters
+    ----------
+    parameters: 
+        Parameters set in the src/parameter_file.py
+    classes:
+        Array of strings
+        Names of each label
+
+    Returns
+    -------
+    model_resnet:
+        tf.keras.sequential model instance
+        Pre-trained ResNet50model
+
     """
     base_model_resnet = ResNet50(include_top = False, 
                              weights = parameters.w, 
                              input_shape = (parameters.img_size,
                                             parameters.img_size,
                                             parameters.n_bands), 
-                             classes = y_train.shape[1])
+                             classes = len(classes))
 
     model_resnet = models.Sequential()
     model_resnet.add(base_model_resnet)
@@ -42,6 +45,16 @@ def build_model(parameters, X_train, y_train):
     model_resnet.add(layers.Dense(128, activation=('relu')))
     model_resnet.add(layers.Dense(64, activation=('relu')))
     model_resnet.add(layers.Dense(10, activation=('softmax')))
+
+    print(model_resnet.summary())
+
+    img_path = str(parameters.path / 'model_directory' / parameters.model_plot_name)
+    plot_model(model_resnet, to_file = img_path, show_shapes=True)
+    IPython.display.Image(img_path)
+    
+    if parameters.freeze_layers == True:
+        for layer in model_resnet.layers:
+            layer.trainable = False        
 
     return model_resnet
 
