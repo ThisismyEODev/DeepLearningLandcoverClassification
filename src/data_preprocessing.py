@@ -13,6 +13,48 @@ from sklearn.model_selection import train_test_split
 import tensorflow as tf
 
 def input_data_preparation(data_foldername, parameters):
+    """
+    Splits data in train, validation and testing sets
+    Optionally balances the class distribution
+
+    Parameters
+    ----------
+    data_foldername: 
+        str
+        Folder name where data is located            
+    parameters: 
+        Parameters set in the src/parameter_file.py
+
+
+    Returns
+    -------
+
+    label_dictionary: 
+        dict
+        Dictionary with label names
+    classes:
+        Array of strings
+        Names of each label
+    X_train: 
+        numpy array of size (perc_training, imagesize, imagesize, numofbands)
+        Training data
+    y_train:
+        numpy array of size (perc_training)
+        Training labels
+    X_validation:
+        numpy array of size (perc_testing, imagesize, imagesize, numofbands)
+        Validation data
+    y_validation:
+        numpy array of size (perc_testing)
+        Validation labels
+    X_test:
+        numpy array of size (perc_testing, imagesize, imagesize, numofbands)
+        Testing data
+    y_test:
+        numpy array of size (perc_testing)
+        Testing labels
+
+    """
     
     path_to_imagery = parameters.path / 'inputdata' / data_foldername
     all_files_in_path = list(path_to_imagery.rglob("*"))
@@ -65,39 +107,22 @@ def input_data_preparation(data_foldername, parameters):
 
         index_balanced = shuffle(index_balanced, 
                                  random_state = parameters.seed)
-        encoded_labels_balanced = encoded_labels[index_balanced]
-        eurosat_imgs_balanced = eurosat_imgs[index_balanced]
+        encoded_labels = encoded_labels[index_balanced]
+        eurosat_imgs = eurosat_imgs[index_balanced]
 
-        X_train, X_validation,\
-            y_train, y_validation =\
-                train_test_split(eurosat_imgs_balanced, 
-                         encoded_labels_balanced, 
-                         stratify = encoded_labels_balanced, 
-                         train_size = .9, 
-                         random_state = parameters.seed)
-
-        _, X_test, _, y_test =\
-            train_test_split(eurosat_imgs_balanced, 
-                         encoded_labels_balanced, 
-                         stratify = encoded_labels_balanced, 
-                         test_size = .1, 
-                         random_state = parameters.seed)
-
-    else:
-        print("We leave the class distribution as is")
-        X_train, X_validation,\
-            y_train, y_validation =\
+    X_train, X_validation,\
+        y_train, y_validation =\
                 train_test_split(eurosat_imgs, 
                          encoded_labels, 
                          stratify = encoded_labels, 
-                         train_size = parameters.training_size, 
+                         train_size = parameters.perc_training, 
                          random_state = parameters.seed)
 
-        _, X_test, _, y_test =\
-            train_test_split(eurosat_imgs_balanced, 
-                         encoded_labels_balanced, 
-                         stratify = encoded_labels_balanced, 
-                         test_size = parameters.test_size, 
+    _, X_test, _, y_test =\
+        train_test_split(eurosat_imgs, 
+                         encoded_labels, 
+                         stratify = encoded_labels, 
+                         test_size = parameters.perc_testing, 
                          random_state = parameters.seed)
 
     return (label_dictionary, classes, 
@@ -107,14 +132,45 @@ def input_data_preparation(data_foldername, parameters):
 
 
 def encode_labels(classes, y_train, y_test, y_validation):
+    """    
+
+    Parameters
+    ----------
+    classes:
+        Array of strings
+        Names of each label
+    y_train:
+        numpy array of size (perc_training)
+        Training labels
+    y_validation:
+        numpy array of size (perc_testing)
+        Validation labels
+    y_test:
+        numpy array of size (perc_testing)
+        Testing labels
+
+    Returns
+    -------
+    y_train_encoded:
+        binary valued numpy array of size (perc_training, num_classes)
+        Encoded training labels
+    y_test_encoded:
+        binary valued numpy array of size (perc_testing, num_classes)
+        Encoded testing labels
+    y_validation_encoded:
+        binary valued numpy array of size (perc_testing, num_classes)
+        Encoded validation labels
+
+    """
+
     y_train_encoded = tf.keras.utils.to_categorical(
         y_train, num_classes=len(classes), dtype='float32')
 
     y_validation_encoded = tf.keras.utils.to_categorical(
-        y_validation, num_classes=None, dtype='float32')
+        y_validation, num_classes=len(classes), dtype='float32')
 
     y_test_encoded = tf.keras.utils.to_categorical(
-        y_test, num_classes=None, dtype='float32')
+        y_test, num_classes=len(classes), dtype='float32')
 
     return y_train_encoded, y_test_encoded, y_validation_encoded 
 

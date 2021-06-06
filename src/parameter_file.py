@@ -42,7 +42,8 @@ n_bands = number_of_bands[spectral_bands]
 seed = 42
 perc_training = .9
 perc_testing = .1
-image_size = (64, 64, n_bands)
+img_size = 64
+image_size = (img_size, img_size, n_bands)
 
 # Set to True if you want to work with balanced classes
 balance = False
