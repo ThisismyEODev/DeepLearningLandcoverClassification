@@ -37,11 +37,13 @@ def make_prediction(model, X_test, y_test, label_dictionary):
     predicted_labels:
         numpy array of size (perc_testing)
         Predicted labels
-    y_test_true : TYPE
-        DESCRIPTION.
-    y_test_pred : TYPE
-        DESCRIPTION.
-    y_pred_encoded : TYPE
+    y_test_true: 
+        list 
+        List of class names of test data
+    y_test_pred:
+        list 
+        List of predicted class names
+    y_pred_encoded:
         Binary-valued predicted labels
 
     """
@@ -57,9 +59,10 @@ def make_prediction(model, X_test, y_test, label_dictionary):
     return predicted_labels, y_test_true, y_test_pred, y_pred_encoded
 
 
-def predict_on_single_testimage(model, X_test, y_test, class_names):
+def predict_on_single_testimage_and_score(model, X_test, y_test, class_names):
     """
-    Pics test image at random and plots it together with class name
+    Pics test image at random and plots it together with class name and 
+    prediction score
 
     Parameters
     ----------
@@ -90,28 +93,6 @@ def predict_on_single_testimage(model, X_test, y_test, class_names):
  - The test label is a {class_names[y_test[ind]]}", fontsize=15)
     plt.show()
     
-def print_prediction_score(model, X_test, class_names):
-    """
-    Prints prediction score of randomly picked image
-
-    Parameters
-    ----------
-    model:
-        tf.keras.sequential model instance
-        Pre-trained ResNet50model
-    X_test:
-        numpy array of size (perc_testing, imagesize, imagesize, numofbands)
-        Testing data
-    class_names:
-        array of strings
-        Names of the labels
-
-    """
-    length_test_data = len(X_test)
-    indexes_test_data = np.arange(length_test_data)
-    ind = np.random.choice(indexes_test_data, 1, replace=False)
-    img = X_test[ind, :, :, :]
-
     predictions = model.predict(img)
     score = tf.nn.softmax(predictions[0])
     print("This image most likely belongs to the {} class with a {:.2f} percent confidence."
@@ -119,14 +100,16 @@ def print_prediction_score(model, X_test, class_names):
 
 def create_prediction_dataframe(y_test_true, y_test_pred, num_classes):
     """
-    
+    Creates a pandas dataframe of class and overall accuracy
 
     Parameters
     ----------
-    y_test_true : TYPE
-        DESCRIPTION.
-    y_test_pred : TYPE
-        DESCRIPTION.
+    y_test_true: 
+        list 
+        List of class names of test data
+    y_test_pred:
+        list 
+        List of predicted class names
     num_classes:
         int
         Number of classes
@@ -135,7 +118,7 @@ def create_prediction_dataframe(y_test_true, y_test_pred, num_classes):
     -------
     pred_df : 
         Pandas dataframe
-        DESCRIPTION.
+        dataframe of class and overall accuracy
 
     """
     pred_df = pd.DataFrame({'y_true': y_test_true, 'y_pred': y_test_pred})
@@ -152,10 +135,12 @@ def dataframe_of_accurate_and_nonaccurate_prediction(y_test_true, y_test_pred):
     """
     Parameters
     ----------
-    y_test_true : TYPE
-        DESCRIPTION.
-    y_test_pred : TYPE
-        DESCRIPTION.
+    y_test_true: 
+        list 
+        List of class names of test data
+    y_test_pred:
+        list 
+        List of predicted class names
 
     Returns
     -------
@@ -175,28 +160,28 @@ def plot_confusion_matrix(y_test_true, y_test_pred, classes):
 
     Parameters
     ----------
-    y_test_true : TYPE
-        DESCRIPTION.
-    y_test_pred : TYPE
-        DESCRIPTION.
+    y_test_true: 
+        list 
+        List of class names of test data
+    y_test_pred:
+        list 
+        List of predicted class names
     classes:
         Array of strings
         Names of classes
 
-
     """
-
     cm = metrics.confusion_matrix(y_test_true, y_test_pred)
     cmap = plt.cm.Blues
     fig, ax = plt.subplots(figsize=(7,7))
     im = ax.imshow(cm, interpolation='nearest', cmap=cmap)
     ax.figure.colorbar(im, ax=ax)
-    ax.set(xticks=np.arange(cm.shape[1]),
-           yticks=np.arange(cm.shape[0]),
-           xticklabels=classes, yticklabels=classes,
-           title="title",
-           ylabel='True label',
-           xlabel='Predicted label')
+    ax.set(xticklabels=classes, yticklabels=classes)
+    plt.xticks(np.arange(cm.shape[1]), rotation=90)
+    plt.yticks(np.arange(cm.shape[0]))
+    plt.xlabel("Predicted")
+    plt.ylabel("Real")
+    plt.title("Confusion Matrix")
 
 def plot_model_roc_curve(model, y_test_encoded, y_pred_encoded, classes):
     """
@@ -251,7 +236,13 @@ def plot_model_roc_curve(model, y_test_encoded, y_pred_encoded, classes):
     plt.plot(fpr["macro"], tpr["macro"],
              label='macro-average ROC curve (area = {0:0.2f})'
                     ''.format(roc_auc["macro"]), linewidth=3)
+    plt.xlabel('False Positive Rate')
+    plt.ylabel('True Positive Rate')
+    plt.legend(loc="lower right")
+    plt.title('Micro-and Macro Average ROC Curve')
+    plt.show()
 
+    plt.figure(figsize=(6, 4))
     for i, label in enumerate(classes):
         plt.plot(fpr[i], tpr[i], label='ROC curve of class {0} (area = {1:0.2f})'
                                             ''.format(label, roc_auc[i]), 
@@ -262,6 +253,6 @@ def plot_model_roc_curve(model, y_test_encoded, y_pred_encoded, classes):
         plt.ylim([0.0, 1.05])
         plt.xlabel('False Positive Rate')
         plt.ylabel('True Positive Rate')
-        plt.title('Receiver Operating Characteristic (ROC) Curve')
+        plt.title('ROC Curve')
         plt.legend(loc="lower right")
         plt.show()

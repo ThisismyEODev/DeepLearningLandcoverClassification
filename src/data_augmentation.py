@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 """
-Created on Tue Jun  1 13:49:13 2021
-
 @author: ThisismyEODev
 @email: nastasja.development@gmail.com
 """

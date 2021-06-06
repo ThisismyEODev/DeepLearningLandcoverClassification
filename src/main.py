@@ -14,7 +14,7 @@ For more information, see project's GitLab repo:
 import argparse
 import time
 import numpy as np
-
+from sklearn import metrics
 from loguru import logger
 
 import parameter_file as parameters
@@ -27,8 +27,9 @@ from .create_resnetmodel import (build_model, compile_and_fit_model,
                                  compile_and_fit_model_from_generator)
 from .model_evaluation import plot_model_accuracy
 from .model_prediction import (make_prediction, 
-                               predict_on_single_testimage,
-                               print_prediction_score,
+                               predict_on_single_testimage_and_score,
+                               create_prediction_dataframe,
+                               dataframe_of_accurate_and_nonaccurate_prediction,
                                plot_confusion_matrix,
                                plot_model_roc_curve)
 
@@ -104,8 +105,20 @@ def main() -> None:
     predicted_labels, y_test_true, y_test_pred, y_pred_encoded = \
         make_prediction(model, X_test, y_test, label_dictionary)
 
-    predict_on_single_testimage(model, X_test, classes)
-    print_prediction_score(model, X_test, classes)
+    print('Accuracy:', np.round(metrics.accuracy_score(y_test_true, 
+                                                   y_test_pred), 4))
+    print('Precision:', np.round(metrics.precision_score(y_test_true, y_test_pred,
+                                               average='weighted'), 4))
+    print('Recall:', np.round(metrics.recall_score(y_test_true, y_test_pred,
+                                               average='weighted'), 4))
+    print('F1 Score:', np.round(metrics.f1_score(y_test_true, y_test_pred,
+                                               average='weighted') ,4))
+
+    predict_on_single_testimage_and_score(model, X_test, y_test, classes)
+    predict_df = create_prediction_dataframe(y_test_true, y_test_pred, len(classes))
+    print(predict_df)
+    accuracy_of_predict_df =\
+        dataframe_of_accurate_and_nonaccurate_prediction(y_test_true, y_test_pred)
 
 
     plot_confusion_matrix(y_test_true, y_test_pred, classes)
