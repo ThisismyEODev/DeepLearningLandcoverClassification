@@ -25,7 +25,7 @@ from .data_exploration import plot_data_distribution_and_correlation
 from .data_augmentation import augment_data
 from .create_resnetmodel import (build_model, compile_and_fit_model, 
                                  compile_and_fit_model_from_generator)
-from .model_evaluation import evaluate_model_accuracy
+from .model_evaluation import plot_model_accuracy
 from .model_prediction import run_prediction_on_example_image
 
 def main() -> None:
@@ -94,7 +94,7 @@ def main() -> None:
     
     print("Print and plot accuracy")
     accuracy = model.evaluate(X_test, y_test_encoded)
-    evaluate_model_accuracy(parameters, model, history, X_test, y_test_encoded)
+    plot_model_accuracy(model, history, parameters.epoch)
     
     print("Predict class of a random sample of the images")
     length_test_data = len(X_test)
