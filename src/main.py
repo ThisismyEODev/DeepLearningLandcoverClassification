@@ -26,7 +26,11 @@ from .data_augmentation import augment_data
 from .create_resnetmodel import (build_model, compile_and_fit_model, 
                                  compile_and_fit_model_from_generator)
 from .model_evaluation import plot_model_accuracy
-from .model_prediction import make_prediction
+from .model_prediction import (make_prediction, 
+                               predict_on_single_testimage,
+                               print_prediction_score,
+                               plot_confusion_matrix,
+                               plot_model_roc_curve)
 
 def main() -> None:
 
@@ -100,7 +104,13 @@ def main() -> None:
     predicted_labels, y_test_true, y_test_pred, y_pred_encoded = \
         make_prediction(model, X_test, y_test, label_dictionary)
 
-    # Report finishing module.
+    predict_on_single_testimage(model, X_test, classes)
+    print_prediction_score(model, X_test, classes)
+
+
+    plot_confusion_matrix(y_test_true, y_test_pred, classes)
+    plot_model_roc_curve(model, y_test_encoded, y_pred_encoded, classes)
+
     logger.info(
         f"\n\nchange_detection_data_analysis finished in"
         f" {(time.time() - start_time)/60:.1f} minutes.\n"
