@@ -19,7 +19,7 @@ from loguru import logger
 
 import parameter_file as parameters
 from .folder_setup import setup_workspace
-from .data_download import retrieve_data
+from .data_download import retrieve_datafolder_name
 from .data_preprocessing import input_data_preparation, encode_labels
 from .data_exploration import plot_data_distribution_and_correlation
 from .data_augmentation import augment_data
@@ -43,8 +43,8 @@ def main() -> None:
     print("Setting up the workspace")
     setup_workspace()
 
-    print("Access data and point to where it is located")
-    data_foldername = retrieve_data()
+    print("Retrieve folder name where input data is located")
+    data_foldername = retrieve_datafolder_name()
 
     print("Split data")
     label_dictionary, classes,\

@@ -30,6 +30,8 @@ path = "C:/UP42_Challenge"
 
 ##### Data access Setup ###########
 
+download = False
+
 # Switch between RGB or all, depending on if you want to use only RGB or all spectral bands
 spectral_bands = "RGB"
 data_folder = input_folder_names[spectral_bands]

@@ -7,18 +7,23 @@
 
 import tensorflow_datasets as tfds
 
-def retrieve_data(parameters):
+def retrieve_datafolder_name(parameters):
     """
     Get data based on download True or False
     Loads data into folder location given in "parameters"
+    Returns name of the folder where data is located
 
-    parameters:     input parameter which is automatically loaded into the main.py
-                    file
-                
-    Returns:
-        
-    data_frame:     Name of folder in which data are now located
-                    str
+    Parameters
+    ----------
+    parameters: 
+        Parameters set in the src/parameter_file.py
+
+    Returns
+    -------
+    data_foldername: 
+        str
+        Folder name where data is located            
+
     """
     if parameters.download == True:
         print("Download EuroSAT dataset", "\n")
@@ -27,9 +32,9 @@ def retrieve_data(parameters):
             name="eurosat",
             split=[
                 tfds.Split.TRAIN.subsplit\
-                    (tfds.percent[:int(parameters.training_size*100)]),
-                tfds.Split.TRAIN.subsplit\
-                    (tfds.percent[int(parameters.training_size*100):]),
+                    (tfds.percent[:int(parameters.perc_training*100)]),
+                tfds.Split.TEST.subsplit\
+                    (tfds.percent[int(parameters.perc_testing*100):]),
                 'test'
                 ],
             as_supervised=True,
