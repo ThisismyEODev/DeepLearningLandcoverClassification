@@ -80,15 +80,15 @@ def main() -> None:
 
     elif parameters.augment == True:
         print("We apply some variations to the data", "\n")
-        train_datagen, validation_datagen = augment_data(parameters, 
+        train_generator, validation_generator = augment_data(parameters, 
                                                    X_train, 
-                                                   y_train, 
-                                                   X_test, 
-                                                   y_test)
+                                                   y_train_encoded, 
+                                                   X_validation, 
+                                                   y_validation_encoded)
 
         history = compile_and_fit_model_from_generator(parameters, model,
-                                                       train_datagen,
-                                                       validation_datagen,
+                                                       train_generator,
+                                                       validation_generator,
                                                        save_model=parameters.save_model)
 
     
