@@ -92,3 +92,4 @@ _augmentation_{augment}_balanced_{balance}_num_epochs_{epochs}\_optimizer_{optim
 model_plot_name = f"Model_ResNet50_{spectral_bands}_trainsize_{1-perc_training}\
 _augmentation_{augment}_balanced_{balance}_num_epochs_{epochs}\_optimizer_{optimizer_name}_run_{run_number}.png"
 
+save_model = True

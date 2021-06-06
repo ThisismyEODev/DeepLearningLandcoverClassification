@@ -64,27 +64,38 @@ def compile_and_fit_model(parameters, model,
                           save_model):
     """
     Compiles and runs the ResNet50 model
-    
-    parameters:     input parameter which is automatically loaded into the main.py
-                    file
-    
-    X_train:        Training images
-                    Array of float of size (num training samples, width, height, number of bands)
-    y_train:        Encoded labels                
-                    Array of float of size (num training samples, number of classes)
-    X_validation:   Validation images
-                    Array of float of size 
-                    (num validation samples, width, height, number of bands)
-    y_validation:    Encoded labels                
-                    Array of float of size (num validation samples, number of classes)
-    save_model: Wether to save the model or not
-                Bool
-    
-    Returns:
-    
-    history     Model training history
-    """
 
+    Parameters
+    ----------
+    parameters: 
+        Parameters set in the src/parameter_file.py
+    model_resnet:
+        tf.keras.sequential model instance
+        Pre-trained ResNet50model
+    X_train: 
+        numpy array of size (perc_training, imagesize, imagesize, numofbands)
+        Training data
+    y_train:
+        numpy array of size (perc_training)
+        Training labels
+    X_validation:
+        numpy array of size (perc_testing, imagesize, imagesize, numofbands)
+        Validation data
+    y_validation:
+        numpy array of size (perc_testing)
+        Validation labels
+    save_model:
+        Whether to save the model or not
+        Boolian
+
+
+    Returns
+    -------
+    history : 
+        History object
+        Training history of the model
+
+    """
     model.compile(optimizer = parameters.optimizer,
                   loss = parameters.loss_function,
                   metrics = parameters.model_metric)
@@ -115,23 +126,35 @@ def compile_and_fit_model(parameters, model,
 
 def compile_and_fit_model_from_generator(parameters, model, 
                                          train_generator,
-                                         test_generator,
+                                         validation_generator,
                                          save_model):
     """
     Compiles and runs the ResNet50 model on generators
-    
-    parameters:         input parameter which is automatically loaded into the main.py
-                        file
-    train_generator:    training data generator
-                        keras imagedatagenerator instance
-    test_generator:     testing data generator
-                        keras imagedatagenerator instance
-    save_model:         Wether to save the model or not
-                        Bool
 
-    Returns:
+    Parameters
+    ----------
+    parameters: 
+        Parameters set in the src/parameter_file.py
+    model_resnet:
+        tf.keras.sequential model instance
+        Pre-trained ResNet50model
+    train_generator: 
+        ImageDataGenerator Instance
+        Training data
+    validation_generator:
+        ImageDataGenerator Instance
+        Validation data
+    save_model:
+        Whether to save the model or not
+        Boolian
 
-    history     Model training history
+
+    Returns
+    -------
+    history : 
+        History object
+        Training history of the model
+
     """
     model.compile(optimizer = parameters.optimizer,
                   loss = parameters.loss_function,
@@ -146,9 +169,7 @@ def compile_and_fit_model_from_generator(parameters, model,
     history = model.fit_generator(train_generator,
                                   batch_size = parameters.batch_size,
                                   epochs = parameters.epoch,
-                                  steps_per_epoch = parameters.steps_per_epoch,
-                                  validation_data = test_generator,
-                                  validation_steps = parameters.validation_steps,
+                                  validation_data = validation_generator,
                                   callbacks = callback_list,
                                   verbose=1)
     

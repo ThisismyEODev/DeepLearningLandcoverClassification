@@ -8,53 +8,61 @@ Created on Tue Jun  1 13:49:13 2021
 
 from keras.preprocessing.image import ImageDataGenerator
 
-def augment_data(parameters, X_train, y_train, X_test, y_test):
+def augment_data(parameters, X_train, y_train_enc, 
+                 X_validation, y_validation_enc):
     """
-    Builds the ResNet50 model
-    
-    parameters: input parameter which is automatically loaded into the main.py
-                file
-    
-    X_train:    Training images
-                Array of float of size 
-                (num training samples, width, height, number of bands)
-    y_train:    Encoded labels                
-                Array of float of size 
-                (num training samples, number of classes)
-    X_test:    Training images
-                Array of float of size 
-                (num testing samples, width, height, number of bands)
-    y_test:    Encoded labels                
-                Array of float of size 
-                (num testing samples, number of classes)
-    
-    Returns:
+    Performs data augmentation before model training
 
-    train_generator:    keras imagedatagenerator instance
-    test_generator:    keras imagedatagenerator instance
+    Parameters
+    ----------
+    parameters: 
+        Parameters set in the src/parameter_file.py
+    X_train: 
+        numpy array of size (perc_training, imagesize, imagesize, numofbands)
+        Training data
+    y_train_enc:
+        numpy array of size (perc_training, num of labels)
+        Encoded training labels
+    X_validation:
+        numpy array of size (perc_testing, imagesize, imagesize, numofbands)
+        Validation data
+    y_validation:
+        numpy array of size (perc_testing, num of labels)
+        Encoded validation labels
+
+    Returns
+    -------
+    train_generator: 
+        ImageDataGenerator Instance
+        Training data
+    validation_generator:
+        ImageDataGenerator Instance
+        Validation data
+
     """
 
-    train_datagen = ImageDataGenerator(
-        shear_range = parameters.shear,
-        zoom_range = parameters.zoom,
-        rotation_range = parameters.rotation,
-        horizontal_flip = True,
-        vertical_flip = True)
+    train_datagen = ImageDataGenerator(zoom_range = parameters.zoom, 
+                                       rotation_range = parameters.rotation,
+                                       width_shift_range = parameters.width_shift, 
+                                       height_shift_range = parameters.height_shift, 
+                                       shear_range = parameters.shear, 
+                                       horizontal_flip = True, 
+                                       fill_mode = parameters.fill)
 
-    test_datagen = ImageDataGenerator()
+    validation_datagen = ImageDataGenerator()
     
     train_generator = train_datagen.flow(
         X_train,
-        y_train,
+        y_train_enc,
         batch_size = parameters.batch_size,
         seed = parameters.seed
         )
     
-    test_generator = test_datagen.flow(
-        X_test,
-        y_test,
+    validation_generator = validation_datagen.flow(
+        X_validation,
+        y_validation_enc,
         batch_size = parameters.batch_size,
         seed = parameters.seed
         )
     
-    return train_datagen, test_datagen
+    return train_generator, validation_generator
