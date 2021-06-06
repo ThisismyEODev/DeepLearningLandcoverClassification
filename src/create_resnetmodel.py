@@ -167,7 +167,6 @@ def compile_and_fit_model_from_generator(parameters, model,
     callback_list = [checkpoint]
 
     history = model.fit_generator(train_generator,
-                                  batch_size = parameters.batch_size,
                                   epochs = parameters.epochs,
                                   validation_data = validation_generator,
                                   callbacks = callback_list,
