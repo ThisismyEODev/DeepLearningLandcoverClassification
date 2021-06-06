@@ -108,7 +108,7 @@ def compile_and_fit_model(parameters, model,
 
     history = model.fit(X_train, y_train,
                  batch_size = parameters.batch_size,
-                 epochs = parameters.epoch,
+                 epochs = parameters.epochs,
                  steps_per_epoch = parameters.steps_per_epoch,
                  validation_data=(X_validation, y_validation),
                  validation_steps = parameters.validation_steps,
@@ -168,7 +168,7 @@ def compile_and_fit_model_from_generator(parameters, model,
 
     history = model.fit_generator(train_generator,
                                   batch_size = parameters.batch_size,
-                                  epochs = parameters.epoch,
+                                  epochs = parameters.epochs,
                                   validation_data = validation_generator,
                                   callbacks = callback_list,
                                   verbose=1)
