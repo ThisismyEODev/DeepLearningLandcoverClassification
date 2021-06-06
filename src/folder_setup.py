@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 """
-
-
 @author: ThisismyEODev
 @email: nastasja.development@gmail.com
 """
@@ -12,8 +10,9 @@ def setup_workspace(parameters):
     """
     Sets up the directories for this challenge
 
-    path : str or Path
-        path to where we want to work.
+    Parameters
+    ----------
+    parameters : Parameters set in the src/parameter_file.py
 
     """
     if isinstance(parameters.path, str):

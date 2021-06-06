@@ -32,7 +32,7 @@ def main() -> None:
 
     """Run module from command line."""
 
-    logger.add(f"logs/{time.strftime('%Y%m%d_%H%M%S')}.log", retention="10 days")
+    logger.add(f"logs/{time.strftime('%Y%m%d_%H%M%S')}.log")
     logger.info("Starting landcover classification ...")
     start_time = time.time()
 
