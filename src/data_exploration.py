@@ -11,18 +11,22 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 sns.set()
 
+
 def plot_data_distribution_and_correlation(classes, X, y):
     """
     Generates some class distribution plots for basic data exploration
 
-    classes:    classes involved in the classification 
-                list of strings
-    X:          Array of images
-                Array of float of size 
-                (num samples, width, height, number of bands)
-    y:          Array of classes
-                Array of float of size 
-                (num samples, number of classes)
+    Parameters
+    ----------
+    classes:
+        Array of strings
+        Names of each label
+    X:
+        numpy array of size (numdata, imagesize, imagesize, numofbands)
+        Numerical data
+    y:
+        numpy array of size (numdata)
+        string data
 
     """
     distribution_per_class = []
