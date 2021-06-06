@@ -26,21 +26,15 @@ The module currently only runs on previously downloaded files.
 Therefore, the path variable in the "parameter_file.py" should be set to the
 path where the data is stored
 
-- Another issue is that when running *proba = model_resnet.predict(X_test_balanced[1, :, :, :])[0]*
-there is an error message concerning the shape of what is expected vs. what is put in. The root cause
-of this error still has to be found.
 
-## TODOs
+## Possible TODOs
 
-- Fix data download issue
-- Fix expected prediction shape error
 - Apply unit testing
 - Increase function / input flexibility
 - Test augmentation since it hasn't been tested yet
 - Implement functionality for dealing with all S2 bands
 - Dockerize
-- If possible, optimize data read
-- If possible, optimize model running
+- Optimize data read / model training
 - Apply grid search for hyperparameter tuning
 
 
