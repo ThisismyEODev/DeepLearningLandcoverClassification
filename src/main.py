@@ -79,16 +79,18 @@ def main() -> None:
         model = build_model(parameters, X_train, y_train_encoded)
         print(model.summary())
     
-        print("Compile and fit model")
-        history = compile_and_fit_model(parameters, model,
-                                    X_train, y_train_encoded,
-                                    X_validation, y_validation_encoded,
-                                    save_model=parameters.save_model)
         if parameters.augment == False:
             print("We leave the data as is", "\n")
 
+            print("Compile and fit model")
+            history = compile_and_fit_model(parameters, model,
+                                    X_train, y_train_encoded,
+                                    X_validation, y_validation_encoded,
+                                    save_model=parameters.save_model)
+
         elif parameters.augment == True:
             print("We apply some variations to the data", "\n")
+
             train_generator, validation_generator = augment_data(parameters, 
                                                    X_train, 
                                                    y_train_encoded, 
@@ -109,7 +111,8 @@ def main() -> None:
     
         print("Run prediction")
         predicted_labels, y_test_true, y_test_pred, y_pred_encoded = \
-                make_prediction(model, X_test, y_test, label_dictionary)
+                make_prediction(parameters,model, X_test, y_test, 
+                                label_dictionary)
 
         print('Accuracy:', np.round(metrics.accuracy_score(y_test_true, 
                                                            y_test_pred), 4))
@@ -123,16 +126,21 @@ def main() -> None:
         print('F1 Score:', np.round(metrics.f1_score(y_test_true, y_test_pred,
                                                average='weighted') ,4))
 
-        predict_on_single_testimage_and_score(model, X_test, y_test, classes)
-        predict_df = create_prediction_dataframe(y_test_true, y_test_pred, 
+        predict_on_single_testimage_and_score(parameters, model, X_test, y_test, 
+                                              classes)
+        predict_df = create_prediction_dataframe(parameters, 
+                                                 y_test_true, y_test_pred, 
                                                  len(classes))
         print(predict_df)
+
         accuracy_of_predict_df =\
-                dataframe_of_accurate_and_nonaccurate_prediction(y_test_true, 
+                dataframe_of_accurate_and_nonaccurate_prediction(parameters,
+                                                                 y_test_true, 
                                                                  y_test_pred)
 
-        plot_confusion_matrix(y_test_true, y_test_pred, classes)
-        plot_model_roc_curve(model, y_test_encoded, y_pred_encoded, classes)
+        plot_confusion_matrix(parameters, y_test_true, y_test_pred, classes)
+        plot_model_roc_curve(parameters, model, y_test_encoded, y_pred_encoded, 
+                             classes)
 
 
     logger.info(

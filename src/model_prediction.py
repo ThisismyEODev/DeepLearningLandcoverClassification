@@ -59,13 +59,16 @@ def make_prediction(model, X_test, y_test, label_dictionary):
     return predicted_labels, y_test_true, y_test_pred, y_pred_encoded
 
 
-def predict_on_single_testimage_and_score(model, X_test, y_test, class_names):
+def predict_on_single_testimage_and_score(parameters, model, X_test, y_test, 
+                                          class_names):
     """
     Pics test image at random and plots it together with class name and 
     prediction score
 
     Parameters
     ----------
+    parameters: 
+        Parameters set in the src/parameter_file.py
     model:
         tf.keras.sequential model instance
         Pre-trained ResNet50model
@@ -91,6 +94,8 @@ def predict_on_single_testimage_and_score(model, X_test, y_test, class_names):
     plt.imshow(img[0])
     plt.title(f"The Model thinks this is a {class_names[prediction[0]]}\
  - The test label is a {class_names[y_test[ind]]}", fontsize=15)
+    plt.savefig(str(parameters.path /'model_directory' /\
+                    'example_predicted_vs_true_label.png'))
     plt.show()
     
     predictions = model.predict(img)
@@ -98,12 +103,15 @@ def predict_on_single_testimage_and_score(model, X_test, y_test, class_names):
     print("This image most likely belongs to the {} class with a {:.2f} percent confidence."
         .format(class_names[np.argmax(score)], 100 * np.max(score)))
 
-def create_prediction_dataframe(y_test_true, y_test_pred, num_classes):
+def create_prediction_dataframe(parameters, y_test_true, y_test_pred, 
+                                num_classes):
     """
     Creates a pandas dataframe of class and overall accuracy
 
     Parameters
     ----------
+    parameters: 
+        Parameters set in the src/parameter_file.py
     y_test_true: 
         list 
         List of class names of test data
@@ -129,12 +137,17 @@ def create_prediction_dataframe(y_test_true, y_test_pred, num_classes):
     pred_df = pred_df.sort_values(by = 'class_acc').reset_index()
     pred_df['overall_acc'] = sum(pred_df.accurate_preds) / sum(pred_df.label_count)
     pred_df = pred_df.sort_values('y_true').reset_index(drop = True)
+    pred_df.to_csv(str(parameters.path /\
+                         'model_directory' /\
+                             'prediction_accuracies.csv'), sep = "\t")
     return pred_df
 
-def dataframe_of_accurate_and_nonaccurate_prediction(y_test_true, y_test_pred):
+def dataframe_of_accurate_and_nonaccurate_prediction(parameters, y_test_true, y_test_pred):
     """
     Parameters
     ----------
+    parameters: 
+        Parameters set in the src/parameter_file.py
     y_test_true: 
         list 
         List of class names of test data
@@ -152,14 +165,19 @@ def dataframe_of_accurate_and_nonaccurate_prediction(y_test_true, y_test_pred):
     pred_df = pd.DataFrame({'y_true': y_test_true, 'y_pred': y_test_pred})
     pred_df['accurate_preds'] = pred_df.y_true == pred_df.y_pred
     pred_df = pred_df.sort_values('y_true')
+    pred_df.to_csv(str(parameters.path /\
+                         'model_directory' /\
+                             'true_vs_false_predictions.csv'), sep = "\t")
     return pred_df
 
-def plot_confusion_matrix(y_test_true, y_test_pred, classes):
+def plot_confusion_matrix(parameters, y_test_true, y_test_pred, classes):
     """
     Plots annotated confusion matrix    
 
     Parameters
     ----------
+    parameters: 
+        Parameters set in the src/parameter_file.py
     y_test_true: 
         list 
         List of class names of test data
@@ -182,13 +200,17 @@ def plot_confusion_matrix(y_test_true, y_test_pred, classes):
     plt.xlabel("Predicted")
     plt.ylabel("Real")
     plt.title("Confusion Matrix")
+    plt.savefig(str(parameters.path /'model_directory' / 'confusion_matrix.png'))
+    plt.show()
 
-def plot_model_roc_curve(model, y_test_encoded, y_pred_encoded, classes):
+def plot_model_roc_curve(parameters, model, y_test_encoded, y_pred_encoded, classes):
     """
     Compute ROC curve and ROC area for each class
 
     Parameters
     ----------
+    parameters: 
+        Parameters set in the src/parameter_file.py
     model:
         tf.keras.sequential model instance
         Pre-trained ResNet50model
@@ -255,4 +277,5 @@ def plot_model_roc_curve(model, y_test_encoded, y_pred_encoded, classes):
         plt.ylabel('True Positive Rate')
         plt.title('ROC Curve')
         plt.legend(loc="lower right")
+        plt.savefig(str(parameters.path /'model_directory' / f'ROC_{label}.png'))
         plt.show()
