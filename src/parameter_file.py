@@ -96,7 +96,8 @@ elif loss == "not_sparse":
 
 model_metric = ['accuracy']
 
-# parameters for saving model output
+##### SAVE OUTPUT
+
 run_number = 1
 
 callback_file_name = f"Callbacks_ResNet50_{spectral_bands}_trainsize_{1-perc_training}\
