@@ -4,6 +4,7 @@
 @email: nastasja.development@gmail.com
 """
 
+from pathlib import Path
 import keras
 from keras import models
 from keras import layers
@@ -48,7 +49,9 @@ def build_model(parameters, classes):
 
     print(model_resnet.summary())
 
-    img_path = str(parameters.path / 'model_directory' / parameters.model_plot_name)
+    img_path = Path(parameters.path) / 'model_directory' 
+    img_path = img_path / Path(parameters.model_plot_name)
+    img_path = str(img_path)
     plot_model(model_resnet, to_file = img_path, show_shapes=True)
     IPython.display.Image(img_path)
     
@@ -100,7 +103,7 @@ def compile_and_fit_model(parameters, model,
                   loss = parameters.loss_function,
                   metrics = parameters.model_metric)
     
-    model_file = parameters.model_path / parameters.model_name
+    model_file = Path(parameters.model_path) / parameters.model_name
     checkpoint = keras.callbacks.ModelCheckpoint(filepath = model_file,
                                              monitor = 'val_loss',
                                              save_best_only = True)
@@ -160,7 +163,7 @@ def compile_and_fit_model_from_generator(parameters, model,
                   loss = parameters.loss_function,
                   metrics = parameters.model_metric)
     
-    model_file = parameters.model_path / parameters.model_name
+    model_file = Path(parameters.model_path) / parameters.model_name
     checkpoint = keras.callbacks.ModelCheckpoint(filepath = model_file,
                                              monitor = 'val_loss',
                                              save_best_only = True)

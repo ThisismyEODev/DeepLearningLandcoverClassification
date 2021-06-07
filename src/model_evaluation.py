@@ -4,15 +4,18 @@
 @email: nastasja.development@gmail.com
 """
 
+from pathlib import Path
 import numpy as np
 import matplotlib.pyplot as plt
 
-def plot_model_accuracy(history, epochs):
+def plot_model_accuracy(parameters, history, epochs):
     """
     Plots the evolution of accuracy and loss with number of epochs
 
     Parameters
     ----------
+    parameters: 
+        Parameters set in the src/parameter_file.py
     history : 
         History object
         Training history of the model
@@ -31,7 +34,7 @@ def plot_model_accuracy(history, epochs):
     plt.xlabel("Epoch #")
     plt.ylabel("Loss/Accuracy")
     plt.legend(loc="upper left")
-
+    
     plt.style.use("ggplot")
     plt.figure()
     N = epochs
@@ -41,6 +44,6 @@ def plot_model_accuracy(history, epochs):
     plt.xlabel("Epoch #")
     plt.ylabel("Loss/Accuracy")
     plt.legend(loc="upper left")
-
+    plt.savefig(str(Path(parameters.path) / "model_directory"))
 
 

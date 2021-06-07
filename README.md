@@ -16,6 +16,12 @@ To run the code, simply go to the src directory and run "python main.py".
 This should load all the configurations set in the "parameter_file.py" file.
 Note that the "path" parameter should point to the directory in which the eurosat data is stored
 (see Known Issues below).
+The parameter file contains, e.g. 
+- the steps which should be run (0: load data, split data, get some first level statistics; 
+1: build model and run training; 2: run prediction and read out some accuracy measures 
+and comparison of predicted vs. true label)
+- The percentage of training and validation / testing data to build and test the model
+- ResNet50 model parameters, e.g. optimizer, learning rate, etc.
 If any other of the parameters should be different, simply change them in the "parameter_file.py".
 
 

@@ -4,7 +4,7 @@
 @email: nastasja.development@gmail.com
 """
 
-
+from pathlib import Path
 import numpy as np
 from PIL import Image
 from sklearn.utils import shuffle
@@ -52,10 +52,10 @@ def input_data_preparation(data_foldername, parameters):
     y_test:
         numpy array of size (perc_testing)
         Testing labels
-
     """
     
-    path_to_imagery = parameters.path / 'inputdata' / data_foldername
+    path_to_imagery = Path(parameters.path) / 'inputdata'
+    path_to_imagery = path_to_imagery / data_foldername
     all_files_in_path = list(path_to_imagery.rglob("*"))
     paths_to_imgs = [x for x in all_files_in_path if\
                      parameters.data_format in x.suffix]

@@ -4,6 +4,7 @@
 @email: nastasja.development@gmail.com
 """
 
+from pathlib import Path
 import numpy as np
 import pandas as pd
 
@@ -94,7 +95,7 @@ def predict_on_single_testimage_and_score(parameters, model, X_test, y_test,
     plt.imshow(img[0])
     plt.title(f"The Model thinks this is a {class_names[prediction[0]]}\
  - The test label is a {class_names[y_test[ind]]}", fontsize=15)
-    plt.savefig(str(parameters.path /'model_directory' /\
+    plt.savefig(str(Path(parameters.path) /'model_directory' /\
                     'example_predicted_vs_true_label.png'))
     plt.show()
     
@@ -137,12 +138,12 @@ def create_prediction_dataframe(parameters, y_test_true, y_test_pred,
     pred_df = pred_df.sort_values(by = 'class_acc').reset_index()
     pred_df['overall_acc'] = sum(pred_df.accurate_preds) / sum(pred_df.label_count)
     pred_df = pred_df.sort_values('y_true').reset_index(drop = True)
-    pred_df.to_csv(str(parameters.path /\
-                         'model_directory' /\
+    pred_df.to_csv(str(Path(parameters.path) / 'model_directory' /\
                              'prediction_accuracies.csv'), sep = "\t")
     return pred_df
 
-def dataframe_of_accurate_and_nonaccurate_prediction(parameters, y_test_true, y_test_pred):
+def dataframe_of_accurate_and_nonaccurate_prediction(parameters, y_test_true, 
+                                                     y_test_pred):
     """
     Parameters
     ----------
@@ -165,8 +166,7 @@ def dataframe_of_accurate_and_nonaccurate_prediction(parameters, y_test_true, y_
     pred_df = pd.DataFrame({'y_true': y_test_true, 'y_pred': y_test_pred})
     pred_df['accurate_preds'] = pred_df.y_true == pred_df.y_pred
     pred_df = pred_df.sort_values('y_true')
-    pred_df.to_csv(str(parameters.path /\
-                         'model_directory' /\
+    pred_df.to_csv(str(Path(parameters.path) / 'model_directory' /\
                              'true_vs_false_predictions.csv'), sep = "\t")
     return pred_df
 
@@ -200,7 +200,7 @@ def plot_confusion_matrix(parameters, y_test_true, y_test_pred, classes):
     plt.xlabel("Predicted")
     plt.ylabel("Real")
     plt.title("Confusion Matrix")
-    plt.savefig(str(parameters.path /'model_directory' / 'confusion_matrix.png'))
+    plt.savefig(str(Path(parameters.path) /'model_directory' / 'confusion_matrix.png'))
     plt.show()
 
 def plot_model_roc_curve(parameters, model, y_test_encoded, y_pred_encoded, classes):
@@ -262,7 +262,7 @@ def plot_model_roc_curve(parameters, model, y_test_encoded, y_pred_encoded, clas
     plt.ylabel('True Positive Rate')
     plt.legend(loc="lower right")
     plt.title('Micro-and Macro Average ROC Curve')
-    plt.savefig(str(parameters.path /'model_directory' / 'ROC_Averages.png'))
+    plt.savefig(str(Path(parameters.path) /'model_directory' / 'ROC_Averages.png'))
     plt.show()
 
     plt.figure(figsize=(6, 4))
@@ -278,5 +278,5 @@ def plot_model_roc_curve(parameters, model, y_test_encoded, y_pred_encoded, clas
         plt.ylabel('True Positive Rate')
         plt.title('ROC Curve')
         plt.legend(loc="lower right")
-        plt.savefig(str(parameters.path /'model_directory' / f'ROC_{label}.png'))
+        plt.savefig(str(Path(parameters.path) /'model_directory' / f'ROC_{label}.png'))
         plt.show()

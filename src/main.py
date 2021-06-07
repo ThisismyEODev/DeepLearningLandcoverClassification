@@ -18,15 +18,15 @@ from sklearn import metrics
 from loguru import logger
 
 import parameter_file as parameters
-from .folder_setup import setup_workspace
-from .data_download import retrieve_datafolder_name
-from .data_preprocessing import input_data_preparation, encode_labels
-from .data_exploration import plot_data_distribution_and_correlation
-from .data_augmentation import augment_data
-from .create_resnetmodel import (build_model, compile_and_fit_model, 
+from folder_setup import setup_workspace
+from data_download import retrieve_datafolder_name
+from data_preprocessing import input_data_preparation, encode_labels
+from data_exploration import plot_data_distribution_and_correlation
+from data_augmentation import augment_data
+from create_resnetmodel import (build_model, compile_and_fit_model, 
                                  compile_and_fit_model_from_generator)
-from .model_evaluation import plot_model_accuracy
-from .model_prediction import (make_prediction, 
+from model_evaluation import plot_model_accuracy
+from model_prediction import (make_prediction, 
                                predict_on_single_testimage_and_score,
                                create_prediction_dataframe,
                                dataframe_of_accurate_and_nonaccurate_prediction,
@@ -46,10 +46,10 @@ def main() -> None:
     )
 
     print("Setting up the workspace")
-    setup_workspace()
+    setup_workspace(parameters)
 
     print("Retrieve folder name where input data is located")
-    data_foldername = retrieve_datafolder_name()
+    data_foldername = retrieve_datafolder_name(parameters)
 
     print("Split data")
     label_dictionary, classes,\
@@ -60,11 +60,11 @@ def main() -> None:
     
     print("Perform some basic data exploration")
     plot_data_distribution_and_correlation(parameters, classes, 
-                                           X_train, y_train)
+                                           X_train, y_train, "train")
     plot_data_distribution_and_correlation(parameters, classes, 
-                                           X_validation, y_validation)
+                                           X_validation, y_validation, "validation")
     plot_data_distribution_and_correlation(parameters, classes, 
-                                           X_test, y_test)
+                                           X_test, y_test, "test")
 
     if parameters.step == "Load_and_data_explo":
         return

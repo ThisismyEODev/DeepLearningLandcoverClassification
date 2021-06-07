@@ -4,6 +4,7 @@
 @email: nastasja.development@gmail.com
 """
 
+from pathlib import Path
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -11,7 +12,7 @@ import seaborn as sns
 sns.set()
 
 
-def plot_data_distribution_and_correlation(parameters, classes, X, y):
+def plot_data_distribution_and_correlation(parameters, classes, X, y, name):
     """
     Generates some class distribution plots for basic data exploration
 
@@ -28,7 +29,8 @@ def plot_data_distribution_and_correlation(parameters, classes, X, y):
     y:
         numpy array of size (numdata)
         string data
-
+    name: str
+        Name of dataset for saving
     """
     distribution_per_class = []
     for i in range(len(classes)):
@@ -40,8 +42,8 @@ def plot_data_distribution_and_correlation(parameters, classes, X, y):
         
     distribution_per_class = np.asarray(distribution_per_class)
     dataframe = pd.DataFrame(distribution_per_class.T, columns = classes)
-    dataframe.to_csv(str(parameters.path /\
-                         'inputdata' / 'per_class_distribution.csv'), sep = "\t")
+    dataframe.to_csv(str(Path(parameters.path) /\
+                         'inputdata' / f'per_class_distribution_{name}.csv'), sep = "\t")
     print(dataframe.describe())
 
     fig = plt.figure(figsize=(10,6))
@@ -50,8 +52,8 @@ def plot_data_distribution_and_correlation(parameters, classes, X, y):
     plt.xlabel("Normalized pixel values", fontsize=15)
     plt.ylabel("Number", fontsize=15)
     plt.legend()
-    plt.savefig(str(parameters.path /'inputdata' /\
-                    'normalized_pixel_distribution.png'))
+    plt.savefig(str(Path(parameters.path) /'inputdata' /\
+                    f'normalized_pixel_distribution_{name}.png'))
     plt.show()
 
     fig = plt.figure(figsize=(15,10))
@@ -59,6 +61,6 @@ def plot_data_distribution_and_correlation(parameters, classes, X, y):
     sns.heatmap(corr, 
             xticklabels=corr.columns.values,
             yticklabels=corr.columns.values)
-    plt.savefig(str(parameters.path /'inputdata' /\
-                    'class_correlation.png'))
+    plt.savefig(str(Path(parameters.path) /'inputdata' /\
+                    f'class_correlation_{name}.png'))
     plt.show()

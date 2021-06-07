@@ -63,7 +63,7 @@ img_size = 64
 image_size = (img_size, img_size, n_bands)
 
 # Set to True if you want to work with balanced classes
-balance = False
+balanced = False
 
 # Set to True if you want to work augment your data before you run the model
 augment = False
@@ -101,12 +101,12 @@ model_metric = ['accuracy']
 run_number = 1
 
 callback_file_name = f"Callbacks_ResNet50_{spectral_bands}_trainsize_{1-perc_training}\
-_augmentation_{augment}_balanced_{balance}_num_epochs_{epochs}\_optimizer_{optimizer_name}_run_{run_number}.h5"
+_augmentation_{augment}_balanced_{balanced}_num_epochs_{epochs}\_optimizer_{optimizer_name}_run_{run_number}.h5"
 
 model_file_name = f"Model_ResNet50_{spectral_bands}_trainsize_{1-perc_training}\
-_augmentation_{augment}_balanced_{balance}_num_epochs_{epochs}\_optimizer_{optimizer_name}_run_{run_number}.h5"
+_augmentation_{augment}_balanced_{balanced}_num_epochs_{epochs}\_optimizer_{optimizer_name}_run_{run_number}.h5"
 
 model_plot_name = f"Model_ResNet50_{spectral_bands}_trainsize_{1-perc_training}\
-_augmentation_{augment}_balanced_{balance}_num_epochs_{epochs}\_optimizer_{optimizer_name}_run_{run_number}.png"
+_augmentation_{augment}_balanced_{balanced}_num_epochs_{epochs}\_optimizer_{optimizer_name}_run_{run_number}.png"
 
 save_model = True
