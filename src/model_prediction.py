@@ -262,6 +262,7 @@ def plot_model_roc_curve(parameters, model, y_test_encoded, y_pred_encoded, clas
     plt.ylabel('True Positive Rate')
     plt.legend(loc="lower right")
     plt.title('Micro-and Macro Average ROC Curve')
+    plt.savefig(str(parameters.path /'model_directory' / 'ROC_Averages.png'))
     plt.show()
 
     plt.figure(figsize=(6, 4))
