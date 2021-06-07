@@ -53,10 +53,12 @@ data_folder = input_folder_names[spectral_bands]
 data_format = input_format[spectral_bands]
 n_bands = number_of_bands[spectral_bands]
 
-# This is the percentage of training data per label!
 seed = 42
+
+# This is the percentage of training data per label!
 perc_training = .9
 perc_testing = .1
+
 img_size = 64
 image_size = (img_size, img_size, n_bands)
 
@@ -78,7 +80,6 @@ freeze_layers = True
 
 epochs = 10
 batch_size = 32
-target_size = (224, 224)
 learning_rate = 0.001 # 0.01, 0.001, 0.0001
 
 optimizer_name = "adam"
@@ -95,7 +96,7 @@ elif loss == "not_sparse":
 
 model_metric = ['accuracy']
 
-# parameters for saving results and inbetween steps
+# parameters for saving model output
 run_number = 1
 
 callback_file_name = f"Callbacks_ResNet50_{spectral_bands}_trainsize_{1-perc_training}\
