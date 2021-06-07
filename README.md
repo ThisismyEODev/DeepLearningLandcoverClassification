@@ -32,6 +32,7 @@ path where the data is stored
 ## Possible TODOs
 
 - Fix environment creation error (Pip)
+- Try out other layer configurations / data augmentation to improve test accuracy
 - Direct download from tensorflow_dataset
 - Apply unit testing
 - Increase function / input flexibility
