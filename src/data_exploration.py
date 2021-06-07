@@ -11,12 +11,14 @@ import seaborn as sns
 sns.set()
 
 
-def plot_data_distribution_and_correlation(classes, X, y):
+def plot_data_distribution_and_correlation(parameters, classes, X, y):
     """
     Generates some class distribution plots for basic data exploration
 
     Parameters
     ----------
+    parameters: 
+        Parameters set in the src/parameter_file.py
     classes:
         Array of strings
         Names of each label
@@ -38,7 +40,8 @@ def plot_data_distribution_and_correlation(classes, X, y):
         
     distribution_per_class = np.asarray(distribution_per_class)
     dataframe = pd.DataFrame(distribution_per_class.T, columns = classes)
-    
+    dataframe.to_csv(str(parameters.path /\
+                         'inputdata' / 'per_class_distribution.csv'), sep = "\t")
     print(dataframe.describe())
 
     fig = plt.figure(figsize=(10,6))
@@ -47,6 +50,8 @@ def plot_data_distribution_and_correlation(classes, X, y):
     plt.xlabel("Normalized pixel values", fontsize=15)
     plt.ylabel("Number", fontsize=15)
     plt.legend()
+    plt.savefig(str(parameters.path /'inputdata' /\
+                    'normalized_pixel_distribution.png'))
     plt.show()
 
     fig = plt.figure(figsize=(15,10))
@@ -54,4 +59,6 @@ def plot_data_distribution_and_correlation(classes, X, y):
     sns.heatmap(corr, 
             xticklabels=corr.columns.values,
             yticklabels=corr.columns.values)
+    plt.savefig(str(parameters.path /'inputdata' /\
+                    'class_correlation.png'))
     plt.show()

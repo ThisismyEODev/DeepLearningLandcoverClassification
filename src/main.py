@@ -59,70 +59,81 @@ def main() -> None:
                     input_data_preparation(data_foldername, parameters)
     
     print("Perform some basic data exploration")
-    plot_data_distribution_and_correlation(classes, 
+    plot_data_distribution_and_correlation(parameters, classes, 
                                            X_train, y_train)
-    plot_data_distribution_and_correlation(classes, 
+    plot_data_distribution_and_correlation(parameters, classes, 
                                            X_validation, y_validation)
-    plot_data_distribution_and_correlation(classes, 
+    plot_data_distribution_and_correlation(parameters, classes, 
                                            X_test, y_test)
 
-    print("Encode labels")
-    y_train_encoded, y_test_encoded, y_validation_encoded=\
-        encode_labels(classes, y_train, y_test, y_validation)
+    if parameters.step == "Load_and_data_explo":
+        return
 
-    print("Build ResNet50 model with some extra layers")
-    model = build_model(parameters, X_train, y_train_encoded)
-    print(model.summary())
+    elif parameters.step == "Model_training":
+
+        print("Encode labels")
+        y_train_encoded, y_test_encoded, y_validation_encoded=\
+            encode_labels(classes, y_train, y_test, y_validation)
+
+        print("Build ResNet50 model with some extra layers")
+        model = build_model(parameters, X_train, y_train_encoded)
+        print(model.summary())
     
-    if parameters.augment == False:
-        print("We leave the data as is", "\n")
-
         print("Compile and fit model")
         history = compile_and_fit_model(parameters, model,
                                     X_train, y_train_encoded,
                                     X_validation, y_validation_encoded,
                                     save_model=parameters.save_model)
+        if parameters.augment == False:
+            print("We leave the data as is", "\n")
 
-    elif parameters.augment == True:
-        print("We apply some variations to the data", "\n")
-        train_generator, validation_generator = augment_data(parameters, 
+        elif parameters.augment == True:
+            print("We apply some variations to the data", "\n")
+            train_generator, validation_generator = augment_data(parameters, 
                                                    X_train, 
                                                    y_train_encoded, 
                                                    X_validation, 
                                                    y_validation_encoded)
 
-        history = compile_and_fit_model_from_generator(parameters, model,
-                                                       train_generator,
-                                                       validation_generator,
-                                                       save_model=parameters.save_model)
+            history = compile_and_fit_model_from_generator(parameters, model,
+                                                           train_generator,
+                                                           validation_generator,
+                                                           save_model=parameters.save_model)
+        return
 
+    elif parameters.step == "Full_pipeline":
     
-    print("Print and plot accuracy")
-    accuracy = model.evaluate(X_test, y_test_encoded)
-    plot_model_accuracy(model, history, parameters.epoch)
+        print("Print and plot accuracy")
+        accuracy = model.evaluate(X_test, y_test_encoded)
+        plot_model_accuracy(model, history, parameters.epoch)
     
-    print("Run prediction")
-    predicted_labels, y_test_true, y_test_pred, y_pred_encoded = \
-        make_prediction(model, X_test, y_test, label_dictionary)
+        print("Run prediction")
+        predicted_labels, y_test_true, y_test_pred, y_pred_encoded = \
+                make_prediction(model, X_test, y_test, label_dictionary)
 
-    print('Accuracy:', np.round(metrics.accuracy_score(y_test_true, 
-                                                   y_test_pred), 4))
-    print('Precision:', np.round(metrics.precision_score(y_test_true, y_test_pred,
-                                               average='weighted'), 4))
-    print('Recall:', np.round(metrics.recall_score(y_test_true, y_test_pred,
-                                               average='weighted'), 4))
-    print('F1 Score:', np.round(metrics.f1_score(y_test_true, y_test_pred,
+        print('Accuracy:', np.round(metrics.accuracy_score(y_test_true, 
+                                                           y_test_pred), 4))
+        print('Precision:', np.round(metrics.precision_score(y_test_true, 
+                                                             y_test_pred,
+                                                             average='weighted'), 
+                                                             4))
+        print('Recall:', np.round(metrics.recall_score(y_test_true, 
+                                                       y_test_pred,
+                                                       average='weighted'), 4))
+        print('F1 Score:', np.round(metrics.f1_score(y_test_true, y_test_pred,
                                                average='weighted') ,4))
 
-    predict_on_single_testimage_and_score(model, X_test, y_test, classes)
-    predict_df = create_prediction_dataframe(y_test_true, y_test_pred, len(classes))
-    print(predict_df)
-    accuracy_of_predict_df =\
-        dataframe_of_accurate_and_nonaccurate_prediction(y_test_true, y_test_pred)
+        predict_on_single_testimage_and_score(model, X_test, y_test, classes)
+        predict_df = create_prediction_dataframe(y_test_true, y_test_pred, 
+                                                 len(classes))
+        print(predict_df)
+        accuracy_of_predict_df =\
+                dataframe_of_accurate_and_nonaccurate_prediction(y_test_true, 
+                                                                 y_test_pred)
 
+        plot_confusion_matrix(y_test_true, y_test_pred, classes)
+        plot_model_roc_curve(model, y_test_encoded, y_pred_encoded, classes)
 
-    plot_confusion_matrix(y_test_true, y_test_pred, classes)
-    plot_model_roc_curve(model, y_test_encoded, y_pred_encoded, classes)
 
     logger.info(
         f"\n\nchange_detection_data_analysis finished in"

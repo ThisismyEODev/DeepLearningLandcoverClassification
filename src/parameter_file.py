@@ -23,16 +23,31 @@ number_of_bands = dict()
 number_of_bands["RGB"] = 3
 number_of_bands["all"] = 13
 
+####### PIPELINE CONFIGURATION 
+# Determine here, how much of the code you want to run now
+
+stepnum = 0
+
+pipeline_steps = dict()
+pipeline_steps[0] = "Load_and_data_explo"
+pipeline_steps[1] = "Model_training"
+pipeline_steps[2] = "Full_pipeline"
+
+step = pipeline_steps[stepnum]
+
 ####### PARAMETER CONFIGURATION 
 
 # Path to working directory
-path = "C:/UP42_Challenge"
+path = "D:/Code/UP42_Challenge"
 
 ##### Data access Setup ###########
 
+# This should stay FALSE for now as download from tensorflow_datasets is not
+# implemented
 download = False
 
-# Switch between RGB or all, depending on if you want to use only RGB or all spectral bands
+# Switch between RGB or all, depending on if you want to use only RGB or 
+# all spectral bands
 spectral_bands = "RGB"
 data_folder = input_folder_names[spectral_bands]
 data_format = input_format[spectral_bands]
