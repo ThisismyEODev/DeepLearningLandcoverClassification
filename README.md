@@ -26,12 +26,15 @@ The module currently only runs on previously downloaded files.
 Therefore, the path variable in the "parameter_file.py" should be set to the
 path where the data is stored
 
+- Running the environment yml file on my laptop, a condaenvexception is printed as pip fails
+
 
 ## Possible TODOs
 
+- Fix environment creation error (Pip)
+- Direct download from tensorflow_dataset
 - Apply unit testing
 - Increase function / input flexibility
-- Test augmentation since it hasn't been tested yet
 - Implement functionality for dealing with all S2 bands
 - Dockerize
 - Optimize data read / model training
